@@ -1,16 +1,13 @@
-//
-// Created by User on 28/10/2025.
-//
-
 #ifndef SCENE_TEST_H
 #define SCENE_TEST_H
+#include <memory>
+
+#include "app/engine_app.h"
 
 
+class TestScene;
 
-class scene_test {
-
-};
-
+std::shared_ptr<Scene> make_scene_test();
 
 
 #endif //SCENE_TEST_H

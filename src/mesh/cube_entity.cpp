@@ -1,121 +1,129 @@
 #include "cube_entity.h"
-
+#include "engine/entity/components/mesh_renderer_component.h"
 #include "engine/precompiled_shaders.h"
+#include "imgui.h"
 
 std::vector<GLfloat> get_colored_cube_vertices() {
     return {
-        -0.5f, -0.5f, 0.5f, // 0
-        0.5f, -0.5f, 0.5f, // 1
-        0.5f, 0.5f, 0.5f, // 2
-        -0.5f, 0.5f, 0.5f, // 3
+        -0.5f, -0.5f,  0.5f,
+         0.5f, -0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,
+        -0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f,  0.5f, -0.5f,
+        -0.5f,  0.5f, -0.5f
+    };
+}
 
-        -0.5f, -0.5f, -0.5f, // 4
-        0.5f, -0.5f, -0.5f, // 5
-        0.5f, 0.5f, -0.5f, // 6
-        -0.5f, 0.5f, -0.5f // 7{
+std::vector<GLuint> get_colored_cube_indices() {
+    return {
+        0,2,1, 0,3,2, // Front
+        1,6,5, 1,2,6, // Right
+        5,7,4, 5,6,7, // Back
+        4,3,0, 4,7,3, // Left
+        4,1,5, 4,0,1, // Bottom
+        3,6,2, 3,7,6  // Top
     };
 }
 
 std::vector<GLfloat> get_phong_cube_vertices() {
     return {
-        // Front face (0,0,1)
-        -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,   0.0f, 0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,   1.0f, 0.0f,   0.0f, 0.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,   1.0f, 1.0f,   0.0f, 0.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,   0.0f, 1.0f,   0.0f, 0.0f, 1.0f,
-
-        // Back face (0,0,-1)
-        -0.5f, -0.5f, -0.5f,   1.0f, 0.0f,   0.0f, 0.0f,-1.0f,
-        -0.5f,  0.5f, -0.5f,   1.0f, 1.0f,   0.0f, 0.0f,-1.0f,
-         0.5f,  0.5f, -0.5f,   0.0f, 1.0f,   0.0f, 0.0f,-1.0f,
-         0.5f, -0.5f, -0.5f,   0.0f, 0.0f,   0.0f, 0.0f,-1.0f,
-
-        // Left face (-1,0,0)
-        -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,  -1.0f, 0.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,   1.0f, 0.0f,  -1.0f, 0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,   1.0f, 1.0f,  -1.0f, 0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,   0.0f, 1.0f,  -1.0f, 0.0f, 0.0f,
-
-        // Right face (1,0,0)
-         0.5f, -0.5f, -0.5f,   1.0f, 0.0f,   1.0f, 0.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,   1.0f, 1.0f,   1.0f, 0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,   0.0f, 1.0f,   1.0f, 0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,   0.0f, 0.0f,   1.0f, 0.0f, 0.0f,
-
-        // Top face (0,1,0)
-        -0.5f,  0.5f, -0.5f,   0.0f, 1.0f,   0.0f, 1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,   0.0f, 0.0f,   0.0f, 1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,   1.0f, 0.0f,   0.0f, 1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,   1.0f, 1.0f,   0.0f, 1.0f, 0.0f,
-
-        // Bottom face (0,-1,0)
-        -0.5f, -0.5f, -0.5f,   1.0f, 1.0f,   0.0f,-1.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,   0.0f, 1.0f,   0.0f,-1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,   0.0f, 0.0f,   0.0f,-1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,   1.0f, 0.0f,   0.0f,-1.0f, 0.0f
-    };
-}
-
-
-std::vector<GLuint> get_colored_cube_indices() {
-    return {
-        0, 2, 1, 0, 3, 2,
-        1, 6, 5, 1, 2, 6,
-        5, 7, 4, 5, 6, 7,
-        4, 3, 0, 4, 7, 3,
-        4, 1, 5, 4, 0, 1,
-        3, 6, 2, 3, 7, 6
+        // position     texcoord   normal
+        // Front face
+        -0.5f,-0.5f, 0.5f, 0,0, 0,0,1,
+         0.5f,-0.5f, 0.5f, 1,0, 0,0,1,
+         0.5f, 0.5f, 0.5f, 1,1, 0,0,1,
+        -0.5f, 0.5f, 0.5f, 0,1, 0,0,1,
+        // Back face
+        -0.5f,-0.5f,-0.5f, 1,0, 0,0,-1,
+        -0.5f, 0.5f,-0.5f, 1,1, 0,0,-1,
+         0.5f, 0.5f,-0.5f, 0,1, 0,0,-1,
+         0.5f,-0.5f,-0.5f, 0,0, 0,0,-1,
+        // Left face
+        -0.5f,-0.5f,-0.5f, 0,0, -1,0,0,
+        -0.5f,-0.5f, 0.5f, 1,0, -1,0,0,
+        -0.5f, 0.5f, 0.5f, 1,1, -1,0,0,
+        -0.5f, 0.5f,-0.5f, 0,1, -1,0,0,
+        // Right face
+         0.5f,-0.5f,-0.5f, 1,0, 1,0,0,
+         0.5f, 0.5f,-0.5f, 1,1, 1,0,0,
+         0.5f, 0.5f, 0.5f, 0,1, 1,0,0,
+         0.5f,-0.5f, 0.5f, 0,0, 1,0,0,
+        // Top face
+        -0.5f, 0.5f,-0.5f, 0,1, 0,1,0,
+        -0.5f, 0.5f, 0.5f, 0,0, 0,1,0,
+         0.5f, 0.5f, 0.5f, 1,0, 0,1,0,
+         0.5f, 0.5f,-0.5f, 1,1, 0,1,0,
+        // Bottom face
+        -0.5f,-0.5f,-0.5f, 1,1, 0,-1,0,
+         0.5f,-0.5f,-0.5f, 0,1, 0,-1,0,
+         0.5f,-0.5f, 0.5f, 0,0, 0,-1,0,
+        -0.5f,-0.5f, 0.5f, 1,0, 0,-1,0
     };
 }
 
 std::vector<GLuint> get_phong_cube_indices() {
     return {
-        0, 2, 1, 0, 3, 2,       // Front
-        4, 6, 5, 4, 7, 6,       // Back
-        8, 10,9, 8,11,10,       // Left
-       12,14,13,12,15,14,       // Right
-       16,18,17,16,19,18,       // Top
-       20,22,21,20,23,22        // Bottom
+        0,2,1, 0,3,2,       // Front
+        4,6,5, 4,7,6,       // Back
+        8,10,9, 8,11,10,    // Left
+        12,14,13, 12,15,14, // Right
+        16,18,17, 16,19,18, // Top
+        20,22,21, 20,23,22  // Bottom
     };
 }
 
-
-CubeEntity::CubeEntity(const glm::vec3 position, const glm::vec3 rotation, const float size, const glm::vec3 rgb,
-        const std::string &texture_path) {
-    this->position = position;
-    this->rotation = rotation;
-    this->size = size;
-    this->color_rgb = rgb;
-    this->texture_path = texture_path;
-
-    colored_cube_mesh = Mesh(MeshType::COLOR, PrecompiledShaders::colored_shader, "", get_colored_cube_indices(), get_colored_cube_vertices(), 36, 24, rgb);
-    phong_cube_mesh = Mesh(MeshType::COLOR_TEXTURE_NORMALS, PrecompiledShaders::phong_shader, texture_path, get_phong_cube_indices(), get_phong_cube_vertices(), 36, 192, rgb);
+ColoredCubeEntity::ColoredCubeEntity(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 rgb)
+    : BaseCubeEntity(position, rotation, scale, rgb) {
+    this->add_component<MeshFilter>(get_colored_cube_vertices(), get_colored_cube_indices(), std::nullopt, Material(rgb, 32));
+    this->add_component<MeshRenderer>(precompiled_shaders::colored_shader);
 }
 
-void CubeEntity::draw(
-        const Camera &camera, const RenderSettings &render_settings, const std::span<const Light> &light_entities) {
-    auto model = glm::mat4(1.0f);
-    model = glm::translate(model, position);
-    model = glm::rotate(model, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-    model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::scale(model, glm::vec3(size, size, size));
+void ColoredCubeEntity::draw(const Camera &camera, const RenderSettings &render_settings) {
+    glm::mat4 model(1.0f);
+    model = glm::translate(model, transform.position);
+    model = glm::rotate(model, transform.rotation.x, glm::vec3(1,0,0));
+    model = glm::rotate(model, transform.rotation.y, glm::vec3(0,1,0));
+    model = glm::rotate(model, transform.rotation.z, glm::vec3(0,0,1));
+    model = glm::scale(model, transform.scale);
 
-    phong_cube_mesh.rgb = color_rgb;
-    phong_cube_mesh.renderer.draw(camera.mvp * model, camera, light_entities);
+    auto mesh_renderer = std::move(this->get_component<MeshRenderer>());
+    mesh_renderer.model = model;
+    mesh_renderer.draw(camera.vp * model, camera, {}, blue_base_material);
 }
 
-void CubeEntity::draw(
-        const Camera &camera, const RenderSettings &render_settings) {
-    auto model = glm::mat4(1.0f);
-    model = glm::translate(model, position);
-    model = glm::rotate(model, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-    model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::scale(model, glm::vec3(size, size, size));
-
-    colored_cube_mesh.rgb = color_rgb;
-    colored_cube_mesh.renderer.draw(camera.mvp * model, camera, {});
+PhongCubeEntity::PhongCubeEntity(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, glm::vec3 rgb,
+                                 const std::string &texture_path)
+    : BaseCubeEntity(position, rotation, scale, rgb) {
+    this->add_component<MeshFilter>(get_phong_cube_vertices(), get_phong_cube_indices(), std::nullopt, Material(rgb, 32));
+    this->add_component<MeshRenderer>(precompiled_shaders::phong_normals_shader);
 }
 
-void CubeEntity::update(double dt) { }
+void PhongCubeEntity::draw(const Camera &camera, const RenderSettings &render_settings,
+                           const std::span<const Light> &light_entities) {
+    glm::mat4 model(1.0f);
+    model = glm::translate(model, transform.position);
+    model = glm::rotate(model, transform.rotation.x, glm::vec3(1,0,0));
+    model = glm::rotate(model, transform.rotation.y, glm::vec3(0,1,0));
+    model = glm::rotate(model, transform.rotation.z, glm::vec3(0,0,1));
+    model = glm::scale(model, transform.scale);
+
+    auto mesh_renderer = std::move(this->get_component<MeshRenderer>());
+    mesh_renderer.model = model;
+    mesh_renderer.draw(camera.vp* model, camera, light_entities, material);
+}
+
+void PhongCubeEntity::on_gui(int entity_id) {
+    ImGui::Begin("Phong Cube Entity");
+
+    ImGui::Text("Transform");
+    ImGui::SliderFloat3("Position", glm::value_ptr(transform.position), -1.0f, 1.0f);
+    ImGui::SliderFloat3("Euler Angles", glm::value_ptr(transform.rotation), -glm::pi<float>(), glm::pi<float>());
+    ImGui::SliderFloat3("Scale", glm::value_ptr(transform.scale), -1.0f, 1.0f);
+
+    ImGui::Text("Material: ");
+    material.display_dear_imgui();
+
+    ImGui::End();
+}

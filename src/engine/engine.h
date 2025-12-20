@@ -4,54 +4,44 @@
 #include <memory>
 #include <vector>
 
+#include "entity/entity.h"
+
 #include "camera.h"
-#include "../mesh/cube.h"
-#include "../mesh/perlin_plane.h"
-#include "renderer.h"
-#include "shader.h"
-#include "window.h"
-#include "../imgui/animation_curve.h"
+#include "entity/components/mesh_renderer_component.h"
+#include "glm/detail/_vectorize.hpp"
+#include "light.h"
+
+class Window;
 
 class Engine {
 public:
-    Engine();
-    void init();
+    explicit Engine(std::shared_ptr<Window> window);
+    void start();
     void update();
     void render();
     void calculate_delta_time();
 
-    [[nodiscard]] Window* get_window() const;
-    [[nodiscard]] Camera& get_camera();
-    [[nodiscard]] PerlinPlaneSettings& get_settings();
-    [[nodiscard]] glm::vec3& get_perlin_position();
-    [[nodiscard]] std::vector<BezierKeyframe>& get_curve(); // for GUI to modify
+    [[nodiscard]] std::shared_ptr<Window> get_window() const;
+    Camera& get_camera();
 
-    bool should_draw_normals_geom = false;
+    void add_entity(const std::shared_ptr<EntityBase>& entity); // <- shared_ptr
 
-private:
-    std::unique_ptr<Window> window_;
-    std::shared_ptr<Shader> perlin_shader_;
-    std::unique_ptr<PerlinPlane> perlin_plane_;
-    std::vector<Cube> cubes_;
+    void set_light(const std::vector<LightRenderObject> &l);
+    void add_light(LightRenderObject light_ro);
 
-    Camera camera_;
-    Renderer renderer_;
+    [[nodiscard]] double get_delta_time() const;
 
-    glm::vec3 perlin_position_ = glm::vec3(0.0f);
-    glm::vec3 previous_perlin_position_ = glm::vec3(0.0f);
-    PerlinPlaneSettings settings_;
-    PerlinPlaneSettings previous_settings_;
-    int height_map_lut_resolution_ = 10;
+    RenderSettings render_settings;
+    std::vector<LightRenderObject> light_render_objects;
+    std::vector<std::shared_ptr<EntityBase>> entities; // <- changed from unique_ptr
+    glm::vec3 background_rgb = glm::vec3(0.12f);
 
-    double delta_time_ = 0.0f;
-    double old_time_log_ = 0.0f;
-
-    std::vector<float> height_map_lut_;
-    std::vector<BezierKeyframe> curve_;
-    std::vector<BezierKeyframe> last_curve_;
-
-    void rebuild_perlin_mesh();
-    [[nodiscard]] bool perlin_settings_changed() const;
+    std::shared_ptr<Window> window;
+    Camera camera;
+    double delta_time;
+    double old_time_log = 0.0f;
 };
+
+
 
 #endif

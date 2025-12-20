@@ -103,3 +103,11 @@
 84	8890	7870821077719881	CMakeFiles/engine.dir/src/mesh/sphere_entity.cpp.obj	34ca1ad0d0a00d1b
 5503	9088	7870821131906690	CMakeFiles/engine.dir/src/scenes/scene_test.cpp.obj	c4305e6677ffafad
 9088	11367	7870821167767269	engine.exe	30c280b67b42c7b1
+41	2670	7879273847340898	CMakeFiles/engine.dir/src/gfx/line_strip_utils.cpp.obj	257229201df7c6d8
+37	2730	7879273847300904	CMakeFiles/engine.dir/src/engine/entity/components/trail_component.cpp.obj	f8b92e9208be7ad1
+30	2884	7879273847230499	CMakeFiles/engine.dir/src/app/engine_app.cpp.obj	59194e164821cfd8
+46	3368	7879273847385961	CMakeFiles/engine.dir/src/scenes/scene_gravity.cpp.obj	73f640a2eb9d84f6
+17	2061	7879274969210689	CMakeFiles/engine.dir/src/gfx/line_strip_utils.cpp.obj	257229201df7c6d8
+21	2675	7879274969260682	CMakeFiles/engine.dir/src/scenes/scene_gravity.cpp.obj	73f640a2eb9d84f6
+10	1998	7879275613374840	CMakeFiles/engine.dir/src/engine/entity/components/trail_component.cpp.obj	f8b92e9208be7ad1
+1999	3729	7879275633271342	engine.exe	30c280b67b42c7b1

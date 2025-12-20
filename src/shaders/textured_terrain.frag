@@ -10,22 +10,29 @@ struct Material {
 struct Light {
     vec3 position;
     vec3 color;
+    float intensity;
+    float constant;
+    float linear;
+    float quadratic;
 };
 
 #define MAX_LIGHTS 4
-#define MAX_TERRAIN_TYPES 8
+#define MAX_TERRAIN_TYPES 7
 
 uniform Light lights[MAX_LIGHTS];
 uniform int lightCount;
 
 uniform vec3 viewPos;
-uniform vec3 objectColor;
 
 uniform int terrainTypeCount;
 uniform float terrainHeights[MAX_TERRAIN_TYPES];
 uniform sampler2D terrainTextures[MAX_TERRAIN_TYPES];
-uniform vec3 terrainColors[MAX_TERRAIN_TYPES];
 uniform Material terrainMaterials[MAX_TERRAIN_TYPES];
+
+uniform float heightMultiplier;
+uniform float textureWrapScale;
+uniform float yMax;
+uniform float yMin;
 
 in vec3 FragPos;
 in vec3 Normal;
@@ -34,72 +41,88 @@ in float WorldHeight;
 
 out vec4 FragColor;
 
+// Gamma value (sRGB)
+const float gamma = 2.2;
+
 void main()
 {
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 result = vec3(0.0);
 
-    float heightNormalized = clamp(WorldHeight, 0.0, 1.0);
-    vec3 terrainColor = vec3(1.0);
-    vec3 texColor = vec3(1.0);
-    Material currentMaterial;
-    currentMaterial.ambient = vec3(0.0);
-    currentMaterial.diffuse = vec3(0.0);
-    currentMaterial.specular = vec3(0.0);
-    currentMaterial.shininess = 0.0;
+    // Normalize height
+    float heightNormalized = (WorldHeight - yMin) / (yMax - yMin);
 
-    // === Lighting ===
-    for (int i = 0; i < lightCount; ++i) {
-        for (int i = 0; i < terrainTypeCount; ++i) {
-            if (heightNormalized >= terrainHeights[i] && heightNormalized < terrainHeights[i + 1]) {
-                currentMaterial = terrainMaterials[i];
+    // Blend textures based on height
+    vec3 blendedTexColor = vec3(0.0);
+    Material currentMaterial = terrainMaterials[0]; // Default
+
+    for (int i = 0; i < terrainTypeCount - 1; ++i) {
+        float lowerHeight = terrainHeights[i];
+        float upperHeight = terrainHeights[i + 1];
+
+        if (heightNormalized >= lowerHeight && heightNormalized < upperHeight) {
+            float blendFactor = smoothstep(lowerHeight, upperHeight, heightNormalized);
+            vec3 tex1Color = texture(terrainTextures[i], TexCoord * textureWrapScale).rgb;
+            vec3 tex2Color = texture(terrainTextures[i+1], TexCoord * textureWrapScale).rgb;
+            blendedTexColor = mix(tex1Color, tex2Color, blendFactor);
+        }
+        if (heightNormalized >= terrainHeights[terrainTypeCount - 1]) {
+            blendedTexColor = texture(terrainTextures[terrainTypeCount - 1], TexCoord * textureWrapScale).rgb;
+        }
+    }
+
+    // Pick material based on height
+    int selectedMaterialID = 0;
+    if (heightNormalized <= terrainHeights[0]) {
+        selectedMaterialID = 0;
+    } else if (heightNormalized >= terrainHeights[terrainTypeCount - 1]) {
+        selectedMaterialID = terrainTypeCount - 1;
+    } else {
+        for (int i = 1; i < terrainTypeCount; ++i) {
+            if (heightNormalized <= terrainHeights[i]) {
+                selectedMaterialID = i;
                 break;
             }
         }
+    }
+    currentMaterial = terrainMaterials[selectedMaterialID];
+
+    // --- Phong/Blinn lighting ---
+    for (int i = 0; i < lightCount; ++i) {
+        vec3 lightDir = normalize(lights[i].position - FragPos);
+        float distance = length(lights[i].position - FragPos);
+
+        // Attenuation
+        float attenuation = 1.0 / (lights[i].constant + lights[i].linear * distance +
+        lights[i].quadratic * (distance * distance));
 
         // Ambient
         vec3 ambient = currentMaterial.ambient * lights[i].color;
 
         // Diffuse
-        vec3 lightDir = normalize(lights[i].position - FragPos);
         float diff = max(dot(norm, lightDir), 0.0);
         vec3 diffuse = currentMaterial.diffuse * diff * lights[i].color;
 
-        // Specular
-        vec3 reflectDir = reflect(-lightDir, norm);
-        float spec = pow(max(dot(viewDir, reflectDir), 0.0), currentMaterial.shininess);
+        // Blinn-Phong specular
+        vec3 halfwayDir = normalize(lightDir + viewDir);
+        float spec = pow(max(dot(norm, halfwayDir), 0.0), currentMaterial.shininess);
         vec3 specular = currentMaterial.specular * spec * lights[i].color;
 
-        result += (ambient + diffuse + specular);
+        // Apply intensity & attenuation
+        vec3 lightContribution = (ambient + diffuse + specular) * lights[i].intensity * attenuation;
+        result += lightContribution;
     }
 
-    // === Terrain Blending ===
-    if (heightNormalized < terrainHeights[1]) {
-        // Blend layer 0 and 1
-        float t = smoothstep(terrainHeights[0], terrainHeights[1], heightNormalized);
-        vec3 color0 = terrainColors[0];
-        vec3 color1 = terrainColors[1];
-        vec3 tex0 = texture(terrainTextures[0], TexCoord).rgb;
-        vec3 tex1 = texture(terrainTextures[1], TexCoord).rgb;
+    // Optional debug tint
+    vec3 debugNormalColor = 0.05 * norm;
+    result += debugNormalColor;
 
-        terrainColor = mix(color0, color1, t);
-        texColor = mix(tex0, tex1, t);
-    } else {
-        for (int i = 1; i < terrainTypeCount - 1; ++i) {
-            if (heightNormalized >= terrainHeights[i] && heightNormalized < terrainHeights[i + 1]) {
-                terrainColor = terrainColors[i];
-                texColor = texture(terrainTextures[i], TexCoord).rgb;
-                break;
-            }
-        }
+    // Apply texture
+    result *= blendedTexColor;
 
-        if (heightNormalized >= terrainHeights[terrainTypeCount - 1]) {
-            terrainColor = terrainColors[terrainTypeCount - 1];
-            texColor = texture(terrainTextures[terrainTypeCount - 1], TexCoord).rgb;
-        }
-    }
+    // Gamma correction (linear -> sRGB)
+    result = pow(result, vec3(1.0 / gamma));
 
-    result *= (terrainColor * 0.8) + (texColor * 0.2);
     FragColor = vec4(result, 1.0);
 }

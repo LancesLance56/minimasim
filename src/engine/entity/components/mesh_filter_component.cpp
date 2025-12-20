@@ -1,15 +1,16 @@
-#include "mesh_component.h"
+#include "mesh_filter_component.h"
 
-// Updated constructor name from Mesh::Mesh to MeshComponent::MeshComponent
-MeshComponent::MeshComponent(const std::vector<GLfloat>& vertices,
+#include <iostream>
+#include <ostream>
+
+// Updated constructor name from Mesh::Mesh to MeshFilter::MeshFilter
+MeshFilter::MeshFilter(const std::vector<GLfloat>& vertices,
            const std::vector<GLuint>& indices,
-           const std::shared_ptr<Shader>& shader,
-           glm::vec3 color,
            const std::optional<std::string>& texture_path,
+           const Material& material,
            bool has_normals,
-           const glm::mat4& model)
-    : indices(indices), vertices(vertices), color(color) {
-    using enum MeshRenderer::Flags;
+           const glm::mat4& model) {
+    using enum Flags;
     // Determine MeshRenderer flags
     auto flags = None;
     if (has_normals && texture_path) flags = PosNormalsTex;
@@ -17,14 +18,10 @@ MeshComponent::MeshComponent(const std::vector<GLfloat>& vertices,
     else if (texture_path) flags = PosTexture;
 
     // Prepare MeshRenderer mesh data
-    MeshRenderer::MeshData data;
-    data.vertices = vertices;
-    data.indices = indices;
-    data.color = color;
-    data.texture_path = texture_path;
-    data.flags = flags;
-    data.model = model;
-
-    // Construct the MeshRenderer
-    renderer = MeshRenderer(shader, data);
+    mesh_data.vertices = vertices;
+    mesh_data.indices = indices;
+    mesh_data.material = material;
+    mesh_data.texture_path = texture_path;
+    mesh_data.flags = flags;
+    mesh_data.model = model;
 }

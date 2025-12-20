@@ -1,7 +1,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "texture.h"
 
-GLuint create_opengl_texture(const std::string &path, const GLuint shaderProgram) {
+GLuint create_opengl_texture(const std::string &path) {
     stbi_set_flip_vertically_on_load(true);
 
     GLuint texture;
@@ -15,7 +15,7 @@ GLuint create_opengl_texture(const std::string &path, const GLuint shaderProgram
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     int width, height, nrChannels;
-    unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
+    unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
     if (!data) {
         std::cout << stbi_failure_reason() << std::endl;
         std::cerr << "Failed to load image in path:\n" << path << std::endl;
@@ -27,9 +27,6 @@ GLuint create_opengl_texture(const std::string &path, const GLuint shaderProgram
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, colorMode, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
-
-    glUseProgram(shaderProgram);
-    glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
 
     stbi_image_free(data);
 

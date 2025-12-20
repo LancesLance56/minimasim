@@ -9,12 +9,12 @@
 #include "imgui_helper.h"
 #include "imgui_internal.h"
 
-BezierEditor::BezierEditor(GLFWwindow *glfwWindow) : m_window(glfwWindow) {}
+BezierEditor::BezierEditor(GLFWwindow* glfwWindow) : m_window(glfwWindow) {}
 
 ImVec2 BezierEditor::ToScreen(const ImVec2 origin, const ImVec2 size, float t, float v) {
     t = ImClamp(t, 0.0f, 1.0f);
     v = ImClamp(v, 0.0f, 1.0f);
-    return {origin.x + t * size.x, origin.y + (1.0f - v) * size.y};
+    return {origin.x + t* size.x, origin.y + (1.0f - v) * size.y};
 }
 
 ImVec2 BezierEditor::FromScreen(const ImVec2 origin, const ImVec2 size, const ImVec2 screen) {
@@ -30,26 +30,26 @@ ImVec2 BezierEditor::MousePos() const {
     return {static_cast<float>(mx), static_cast<float>(my)};
 }
 
-void BezierEditor::Draw(const char *label, BezierCurve &curve, const ImVec2 canvasSize) {
+void BezierEditor::Draw(const char* label, BezierCurve &curve, const ImVec2 canvasSize) {
     std::ranges::sort(curve, [](const BezierKeyframe& a, const BezierKeyframe& b) {
         return a.time < b.time;
     });
 
     ImGui::TextUnformatted(label);
     const ImVec2 origin = ImGui::GetCursorScreenPos();
-    ImDrawList *draw_list = ImGui::GetWindowDrawList();
+    ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
     constexpr float margin = 20.0f;
     const ImVec2 inner_origin = origin + ImVec2(margin, margin);
-    const ImVec2 inner_size = canvasSize - ImVec2(margin * 2, margin * 2);
+    const ImVec2 inner_size = canvasSize - ImVec2(margin* 2, margin* 2);
 
     draw_list->AddRectFilled(origin, origin + canvasSize, IM_COL32(30, 30, 30, 255));
     draw_list->AddRect(origin, origin + canvasSize, IM_COL32(255, 255, 255, 100));
     ImGui::InvisibleButton("curve_canvas", canvasSize);
 
     for (int i = 0; i <= 10; ++i) {
-        const float screen_x = inner_origin.x + static_cast<float>(i) / 10.0f * inner_size.x;
-        const float screen_y = inner_origin.y + static_cast<float>(i) / 10.0f * inner_size.y;
+        const float screen_x = inner_origin.x + static_cast<float>(i) / 10.0f* inner_size.x;
+        const float screen_y = inner_origin.y + static_cast<float>(i) / 10.0f* inner_size.y;
         draw_list->AddLine(
                 ImVec2(screen_x, inner_origin.y), ImVec2(screen_x, inner_origin.y + inner_size.y),
                 IM_COL32(255, 255, 255, 20));
@@ -142,7 +142,7 @@ void BezierEditor::Draw(const char *label, BezierCurve &curve, const ImVec2 canv
 
         // Interaction for starting a drag
         if (const float distSq = ImLengthSqr(mouse - p);
-            mouseLeft == GLFW_PRESS && distSq < radius * radius * 4 && !k.draggingTangent && !isAPointSelected) {
+            mouseLeft == GLFW_PRESS && distSq < radius* radius* 4 && !k.draggingTangent && !isAPointSelected) {
             isAPointSelected = true;
             k.draggingPoint = true;
         }
@@ -169,18 +169,46 @@ void BezierEditor::Draw(const char *label, BezierCurve &curve, const ImVec2 canv
     }
 }
 
+static float evaluateCubicBezier(float p0, float p1, float p2, float p3, float t) {
+    float u = 1.0f - t;
+    float tt = t* t;
+    float uu = u* u;
+    float uuu = uu* u;
+    float ttt = tt* t;
+
+    return uuu* p0 + 3.0f* uu* t* p1 + 3.0f* u* tt* p2 + ttt* p3;
+}
+
 std::vector<float> BezierEditor::computeHeightRemapLUT(const std::vector<BezierKeyframe> &keyframes, int resolution) {
     std::vector<float> lut(resolution);
+    if (keyframes.size() < 2) return lut;
+
     for (int i = 0; i < resolution; ++i) {
-        float t = static_cast<float>(i) / (resolution - 1); // [0, 1]
-        // Simple linear interpolation (replace with proper bezier eval if needed)
+        float t = static_cast<float>(i) / (resolution - 1); // global time in [0, 1]
+
         for (size_t j = 0; j < keyframes.size() - 1; ++j) {
-            if (t >= keyframes[j].time && t <= keyframes[j + 1].time) {
-                float localT = (t - keyframes[j].time) / (keyframes[j + 1].time - keyframes[j].time);
-                lut[i] = glm::mix(keyframes[j].value, keyframes[j + 1].value, localT);
+            const auto &k0 = keyframes[j];
+            const auto &k1 = keyframes[j + 1];
+
+            if (t >= k0.time && t <= k1.time) {
+                // Normalize to local segment [0, 1]
+                float segmentDuration = k1.time - k0.time;
+                float localT = (t - k0.time) / segmentDuration;
+
+                float v0 = k0.value;
+                float v3 = k1.value;
+
+                float outTangentY = glm::normalize(glm::vec2(k0.tangentOffset.x, k0.tangentOffset.y)).y;
+                float inTangentY = glm::normalize(glm::vec2(k1.tangentOffset.x, k1.tangentOffset.y)).y;
+
+                float p1 = v0 + outTangentY;
+                float p2 = v3 - inTangentY;
+
+                lut[i] = evaluateCubicBezier(v0, p1, p2, v3, localT);
                 break;
             }
         }
     }
+
     return lut;
 }

@@ -4,8 +4,8 @@
 #include <vector>
 #include <glm/glm.hpp>
 
+#include "../engine/entity/components/mesh_filter_component.h"
 #include "../engine/entity/entity.h"
-#include "../mesh/mesh.h"
 #include "math/perlin.h"
 #include "shader.h"
 
@@ -23,8 +23,8 @@ public:
     void draw(const Camera& camera, const RenderSettings& render_settings, std::span<const Light> light_entities);
 
 private:
-    Mesh mesh_;
-    Renderer mesh_normals_renderer_;
+    MeshFilter mesh_;
+    MeshRenderer mesh_normals_renderer_;
     std::vector<GLuint> terrain_texture_ids_;
     std::vector<float> lut_;
 };

@@ -7,13 +7,13 @@
 
 class TestGUI {
 public:
-    void init(const Window& window, Engine& gameRef);
-    void begin_frame();
-    void render();
+    void init(const Window& window, Engine& engineRef);
+    void begin_frame() const;
+    static void render();
 
 private:
     BezierEditor editor;
-    Engine* game = nullptr;  // Pointer to interact with Game instance
+    Engine* engine = nullptr;  // Pointer to interact with Game instance
 };
 
 #endif

@@ -1,111 +1,110 @@
 #include "engine.h"
 
-#include "../gfx/lightpos.h"
+#include <GLFW/glfw3.h>
+#include <algorithm>
+
+#include <utility>
+
+#include "../gfx/light.h"
 #include "../input/handle_input.h"
+#include "mesh/cube_entity.h"
+#include "mesh/sphere_entity.h"
+#include "precompiled_entities.h"
+#include "precompiled_shaders.h"
+#include "window.h"
 
-Engine::Engine() : settings_({
-        .sizeOfMesh = 100,
-        .meshResolution = 1,
-        .x_offset = 0.0f,
-        .z_offset = 0.0f,
-        .scale = 25.0f,
-        .seed = 0,
-        .heightMultiplier = 5.0f,
-        .octaves = 5,
-        .persistence = 0.5f,
-        .lacunarity = 2.0f
-    }), previous_settings_(settings_) {}
+Engine::Engine(std::shared_ptr<Window> window) {
+    delta_time = 0.0f;
+    this->window = std::move(window);
+    precompiled_shaders::compile();
+    precompiled_entities::compile();
+}
 
-void Engine::init() {
-    window_ = std::make_unique<Window>();
+void Engine::start() {
+    render_settings = { false, false, false };
 
-    camera_ = Camera(
+    camera = Camera(
         glm::vec3(-5.0f, 10.0f, 4.5f),
-        glm::vec3(static_cast<float>(settings_.sizeOfMesh), 0.0f, static_cast<float>(settings_.sizeOfMesh)),
+        glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(0.0f, 1.0f, 0.0f),
-        static_cast<float>(SCREEN_WIDTH) / SCREEN_HEIGHT
+        static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT)
     );
+    light_render_objects = std::vector<LightRenderObject>();
 
-    perlin_shader_ = std::make_shared<Shader>(
-        "./src/shaders/textured_terrain.vert",
-        "./src/shaders/textured_terrain.frag"
-    );
+    window->set_camera(camera);
+    glfwSetKeyCallback(window->window, key_callback);
 
-    window_->set_camera(camera_);
-    glfwSetKeyCallback(window_->window, key_callback);
-}
-
-bool Engine::perlin_settings_changed() const {
-    return settings_ != previous_settings_ || perlin_position_ != previous_perlin_position_;
-}
-
-void Engine::rebuild_perlin_mesh() {
-    perlin_plane_ = std::make_unique<PerlinPlane>(
-        perlin_shader_,
-        settings_,
-        height_map_lut_,
-        perlin_position_
-    );
+    old_time_log = glfwGetTime();
 }
 
 void Engine::update() {
-    handle_input(window_->window);
+    handle_input(window->window);
 
-    for (const auto& [position, color] : global_lights) {
-        cubes_.emplace_back(position, glm::vec3(0.0f), 1, color);
+    if (!shouldRenderGui) {
+        camera.move_camera(handle_movement(window->window, camera.camera_front, camera.global_up, delta_time));
+        camera.update_camera();
     }
 
-    // Update camera
-    camera_.move_camera(handle_movement(window_->window, camera_.camera_front, camera_.global_up, delta_time_));
-    camera_.update_camera();
-
-    bool needRebuild = false;
-
-    if (perlin_settings_changed()) {
-        needRebuild = true;
-    }
-
-    if (curve_ != last_curve_ && glfwGetMouseButton(window_->window, GLFW_MOUSE_BUTTON_LEFT) != GLFW_PRESS) {
-        height_map_lut_ = BezierEditor::computeHeightRemapLUT(curve_, height_map_lut_resolution_);
-        last_curve_ = curve_;
-        needRebuild = true;
-    }
-
-    if (needRebuild) {
-        rebuild_perlin_mesh();
-        previous_settings_ = settings_;
-        previous_perlin_position_ = perlin_position_;
+    for (auto const& entity : entities) {
+        entity->update(delta_time);
     }
 }
 
-
 void Engine::render() {
-    if (perlin_plane_) perlin_plane_->draw(camera_.mvp, camera_, should_draw_normals_geom);
-    for (const auto &cube: cubes_) cube.draw(camera_.mvp, camera_);
-    cubes_.clear();
+    glClearColor(background_rgb.x, background_rgb.y, background_rgb.z, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // extract Light from LightRenderObject (Light, bool) as of now
+    std::vector<Light> lights;
+    std::ranges::transform(
+            light_render_objects, std::back_inserter(lights),
+            [](const LightRenderObject &t){ return t.light; });
+
+    // draw entities with access to lights
+    for (auto const& entity : entities) {
+        if (render_settings.wireframe)
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+        entity->draw(camera, render_settings, lights);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
+
+    // draw lights themselves (as cubes, gizmos, etc.)
+    for (const auto &[light, visible, radius] : light_render_objects) {
+        if (!visible) continue;
+
+        precompiled_entities::white_sphere_entity->transform.position = light.position;
+        precompiled_entities::white_sphere_entity->radius = radius;
+        precompiled_entities::white_sphere_entity->draw(camera, render_settings, lights);
+    }
 }
 
 void Engine::calculate_delta_time() {
-    delta_time_ = glfwGetTime() - old_time_log_;
-    old_time_log_ = glfwGetTime();
+    double current_time = glfwGetTime();
+    delta_time = current_time - old_time_log;
+    old_time_log = current_time;
 }
 
-Window *Engine::get_window() const {
-    return window_.get();
+std::shared_ptr<Window> Engine::get_window() const {
+    return window;
 }
 
-Camera &Engine::get_camera() {
-    return camera_;
+Camera& Engine::get_camera() {
+    return camera;
 }
 
-PerlinPlaneSettings &Engine::get_settings() {
-    return settings_;
+void Engine::add_entity(const std::shared_ptr<EntityBase>& entity) {
+    entities.push_back(entity);
 }
 
-glm::vec3 &Engine::get_perlin_position() {
-    return perlin_position_;
+void Engine::add_light(LightRenderObject light_ro) {
+    light_render_objects.emplace_back(light_ro);
 }
 
-std::vector<BezierKeyframe> &Engine::get_curve() {
-    return curve_;
+void Engine::set_light(const std::vector<LightRenderObject> &l) {
+    this->light_render_objects = l;
+}
+
+double Engine::get_delta_time() const {
+    return delta_time;
 }
