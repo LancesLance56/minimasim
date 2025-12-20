@@ -1,71 +1,71 @@
-#include "camera.h"
+#include "projection_camera.h"
+
+#include <glm/gtx/quaternion.hpp>
 
 Camera::Camera(
-   const glm::vec3 position,
-   const glm::vec3 target,
-   const glm::vec3 globalUp,
-   const float aspect_ratio,
-   const float FOV /*= 45.0f*/,
-   const float near /*= 0.1f*/,
-   const float far /*= 100.f*/
+    glm::vec3 position,
+    glm::vec3 target,
+    glm::vec3 global_up,
+    float aspect_ratio,
+    float fov,
+    float near,
+    float far
 ) {
+    this->position   = position;
+    this->global_up  = global_up;
+    this->camera_front = glm::normalize(target - position);
 
-   this->position = position;
-   this->target = target;
-   this->globalUp = globalUp;
-
-   // initialize vectors
-   cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-
-   // m denotes mat4
-   m_lookAt = glm::lookAt(position, target, globalUp); // camera
-   m_projection = glm::perspective(glm::radians(FOV), aspect_ratio, near, far);
-   m_model = glm::mat4(1.0f);
-
-   mvp = m_model * m_lookAt * m_projection;
+    m_projection = glm::perspective(glm::radians(fov), aspect_ratio, near, far);
+    update_camera();
 }
 
-void Camera::change_rotation(GLFWwindow* window, const float xpos, const float ypos, float mouseSensitivity) {
-    // to make sure that the delta mouse coords doesn't freak out and move the camera too much
-    if (isFirstFrame) {
-        isFirstFrame = false;
-        isSecondFrame = true;
-    } else if (isSecondFrame) {
-        glfwSetCursorPos(window, static_cast<float>(SCREEN_WIDTH)/2, static_cast<float>(SCREEN_HEIGHT)/2);
-        isSecondFrame = false;
+void Camera::change_rotation(float x_pos, float y_pos, float mouse_sensitivity) {
+    static float last_x = 0.0f;
+    static float last_y = 0.0f;
+
+    if (is_first_frame) {
+        last_x = x_pos;
+        last_y = y_pos;
+        is_first_frame = false;
     }
 
-    if (glfwGetKey(window, GLFW_KEY_LEFT_ALT)) return;
+    float x_offset = (x_pos - last_x) * mouse_sensitivity;
+    float y_offset = (last_y - y_pos) * mouse_sensitivity; // reversed
+    last_x = x_pos;
+    last_y = y_pos;
 
-    const float deltaMouseX = xpos - static_cast<float>(SCREEN_WIDTH)/2;
-    const float deltaMouseY = static_cast<float>(SCREEN_HEIGHT)/2 - ypos;
+    yaw   -= x_offset;
+    pitch += y_offset;
 
-    yaw += deltaMouseX * mouseSensitivity;
-    pitch += deltaMouseY * mouseSensitivity;
+    // clamp pitch
+    if (pitch > 89.0f) pitch = 89.0f;
+    if (pitch < -89.0f) pitch = -89.0f;
 
-    if(pitch > 89.0f)
-        pitch = 89.0f;
-    if(pitch < -89.0f)
-        pitch = -89.0f;
+    // build quaternion from yaw/pitch
+    glm::quat q_pitch = glm::angleAxis(glm::radians(pitch), glm::vec3(1, 0, 0));
+    glm::quat q_yaw   = glm::angleAxis(glm::radians(yaw),   glm::vec3(0, 1, 0));
 
-    glm::vec3 front;
-    front.x = static_cast<float>(cos(glm::radians(yaw))) * cos(glm::radians(pitch));
-    front.y = static_cast<float>(sin(glm::radians(pitch)));
-    front.z = static_cast<float>(sin(glm::radians(yaw))) * cos(glm::radians(pitch));
-    cameraFront = glm::normalize(front);
+    orientation = q_yaw* q_pitch;
 
-    glfwSetCursorPos(window, static_cast<float>(SCREEN_WIDTH)/2, static_cast<float>(SCREEN_HEIGHT)/2);
+    camera_front = glm::normalize(orientation* glm::vec3(0, 0, -1));
 }
 
-void Camera::moveCamera(const glm::vec3 move_vector) {
-    if (move_vector != glm::vec3(0.0f, 0.0f, 0.0f)) {
-        position -= move_vector;
-        m_lookAt = glm::translate(m_lookAt, move_vector);
-    }
+void Camera::rotate_to_target(glm::vec3 target_vector, float smoothness) {
+    glm::vec3 dir = glm::normalize(target_vector - position);
+    glm::quat target_orientation = glm::rotation(camera_front, dir);
+    orientation = glm::slerp(orientation, target_orientation* orientation, smoothness);
+    camera_front = glm::normalize(orientation* glm::vec3(0, 0, -1));
 }
 
-void Camera::updateCamera() {
-    m_lookAt = glm::lookAt(position, position + cameraFront, globalUp);
+void Camera::move_camera(glm::vec3 move_vector) {
+    position -= move_vector;
+    update_camera();
+}
 
-    mvp = m_projection * m_lookAt * m_model;
+void Camera::update_camera() {
+    right = glm::normalize(glm::cross(camera_front, global_up));
+    up    = glm::normalize(glm::cross(right, camera_front));
+
+    m_look_at = glm::lookAt(position, position + camera_front, up);
+    mvp = m_projection* m_look_at* m_model;
 }

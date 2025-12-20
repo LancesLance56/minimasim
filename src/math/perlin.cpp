@@ -9,11 +9,11 @@
 static int permutation[512];
 
 inline float fade(const float t) {
-    return t * t * t * (t * (t * 6 - 15) + 10);
+    return t* t* t* (t* (t* 6 - 15) + 10);
 }
 
 inline float lerp(const float t, const float a, const float b) {
-    return a + t * (b - a);
+    return a + t* (b - a);
 }
 
 inline float grad(const int hash, const float x, const float y) {
@@ -74,7 +74,7 @@ float perlinNoise(float x, float y, const int seed, const float scale, const int
     y /= scale;
 
     for (int i = 0; i < octaves; i++) {
-        total += perlin(x * frequency, y * frequency) * amplitude;
+        total += perlin(x* frequency, y* frequency) * amplitude;
 
         maxValue += amplitude;
 

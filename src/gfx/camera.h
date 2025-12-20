@@ -3,55 +3,56 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <iostream>
-#include "gfx.h"
+#include <glm/gtc/quaternion.hpp>
 
-#include "GLFW/glfw3.h"
 
 class Camera {
 public:
-    glm::vec3 right;
-    glm::vec3 up;
-    glm::vec3 direction;
+    // Orientation
+    glm::vec3 camera_front{0.0f, 0.0f, -1.0f};
+    glm::vec3 right{1.0f, 0.0f, 0.0f};
+    glm::vec3 up{0.0f, 1.0f, 0.0f};
+    glm::vec3 global_up{0.0f, 1.0f, 0.0f};
+    glm::quat orientation{1.0f, 0.0f, 0.0f, 0.0f};
 
-    glm::mat4 mvp;
-    glm::mat4 m_lookAt;
-    glm::mat4 m_projection;
-    glm::mat4 m_model;
+    // Matrices
+    glm::mat4 mvp{1.0f};
+    glm::mat4 m_look_at{1.0f};
+    glm::mat4 m_projection{1.0f};
+    glm::mat4 m_model{1.0f};
 
-    glm::vec3 position;
-    glm::vec3 target;
-    glm::vec3 globalUp;
-    glm::vec3 cameraFront;
+    // Position
+    glm::vec3 position{0.0f, 0.0f, 3.0f};
 
-    float yaw = -90;
-    float pitch = 0;
+    // Movement / rotation state
+    float yaw   = -90.0f;
+    float pitch = 0.0f;
 
-    bool isFirstFrame = true;
-    bool isSecondFrame = false;
+    bool is_first_frame  = true;
+    bool is_second_frame = false;
 
-    float yVelocity = 0.0f;
-    float jumpVelocity = 4.0f;
-    float gravity = 100.0f;
+    // Jumping/physics
+    float y_velocity    = 0.0f;
+    float jump_velocity = 4.0f;
+    float gravity       = 100.0f;
 
-    // makes lookAt matrix
-
+    // Constructors
     Camera() = default;
-
     Camera(
-      glm::vec3 position,
-      glm::vec3 target,
-      glm::vec3 globalUp,
-      float aspect_ratio,
-      float FOV = 45.0f,
-      float near = 0.1f,
-      float far = 100.f
+        glm::vec3 position,
+        glm::vec3 target,
+        glm::vec3 global_up,
+        float aspect_ratio,
+        float fov = 90.0f,
+        float near = 0.1f,
+        float far  = 100.0f
     );
 
-    void change_rotation(GLFWwindow* window, float xpos, float ypos, float mouseSensitivity);
-    void moveCamera(glm::vec3 move_vector);
-    void updateCamera();
-
+    // Methods
+    void change_rotation(float x_pos, float y_pos, float mouse_sensitivity);
+    void rotate_to_target(glm::vec3 target_vector, float smoothness = 1.0f);
+    void move_camera(glm::vec3 move_vector);
+    void update_camera();
 };
 
 #endif

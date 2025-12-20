@@ -4,13 +4,14 @@
 #include "glad_include.h"
 #include <vector>
 
-class PerlinMesh {
+class PerlinNoiseMap {
 public:
     int square_length;
     std::vector<GLfloat> vertices;
     std::vector<GLuint> indices;
 
-    explicit PerlinMesh(const struct PerlinPlaneSettings &settings);
+    explicit PerlinNoiseMap(const struct PerlinPlaneSettings &settings);
+    void recalculate_vertex_normals(std::vector<GLfloat> &vertices, const std::vector<GLuint> &indices, const struct PerlinPlaneSettings& settings) const;
 };
 
 
