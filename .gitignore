@@ -18,4 +18,6 @@ src/math/perlin.cpp
 src/math/perlin.h
 src/math/perlin_noise_map.cpp
 src/math/perlin_noise_map.h
+CMakeFiles
+Testing
 TODO

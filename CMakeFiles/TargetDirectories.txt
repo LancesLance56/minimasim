@@ -1,3 +1,0 @@
-C:/Projects/physgl/CMakeFiles/engine.dir
-C:/Projects/physgl/CMakeFiles/edit_cache.dir
-C:/Projects/physgl/CMakeFiles/rebuild_cache.dir
