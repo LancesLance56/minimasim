@@ -1,59 +1,66 @@
+#include "scene_gravity.h"
 #include "../engine/engine.h"
+#include "../mesh/sphere_entity.h"
 #include "app/engine_app.h"
 #include "light.h"
-#include "../mesh/sphere_entity.h"
-#include "scene_axis_cube.h" // Include the header
 
-// Define the concrete scene class
-class AxisCubeScene : public Scene {
+#include "engine/entity/components/trail_component.h"
+#include "gfx.h"
+#include "math/n_body_sim.h"
+
+class AxisGravityScene : public Scene {
 public:
-    AxisCubeScene() {
-        // Initialize lights in the constructor
-        lights = {
-            { { glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f), 1.0f }, true, 2.5f }
-        };
-    }
+    AxisGravityScene() = default;
 
     void setup(Engine& engine, std::shared_ptr<Window> window) override {
-        // Camera setup
-        engine.camera.position = glm::vec3(0.0f, 15.0f, 0.0f);
-        engine.camera.rotate_to_target(glm::vec3(0.0f, 0.0f, 0.0f));
+        //float window_aspect_ratio = engine.window->get_aspect_ratio();
+        //engine.camera = Camera(
+        //    glm::vec3(0.0f, 15.0f, 0.0f), glm::vec3(0.0f),
+        //    glm::vec3(0.0f, 1.0f, 0.0f), -15.0f * window_aspect_ratio,
+        //    15.0f * window_aspect_ratio, -15.0f, 15.0f, -100.0f, 100.0f);
 
-        // Create spheres and assign to class members.
         blue_sphere = std::make_shared<SphereEntity>(
-            glm::vec3(4.0f, 0.0f, -4.0f), 3, 1, true, blue_base_material);
+            glm::vec3(8.0f, 0.0f, -8.0f), 3, 1, false, blue_base_material);
         orange_sphere = std::make_shared<SphereEntity>(
-            glm::vec3(-4.0f, 0.0f, 4.0f), 3, 1, true, orange_base_material);
+            glm::vec3(-8.0f, 0.0f, 8.0f), 3, 1, false, orange_base_material);
+        yellow_sphere = std::make_shared<SphereEntity>(
+            glm::vec3(0.0f), 3, 1, false, yellow_base_material);
 
-        // Add to engine
-        engine.set_light(lights);
         engine.add_entity(blue_sphere);
+        engine.add_entity(yellow_sphere);
         engine.add_entity(orange_sphere);
+        engine.set_light(lights);
+
+        blue_sphere->add_component<NBodySim::MassComponent>(glm::vec3(0.0f, 0.0f, 1.0f), 5.0f);
+        orange_sphere->add_component<NBodySim::MassComponent>(glm::vec3(1.0f, 0.0f, 1.0f), 5.0f);
+        yellow_sphere->add_component<NBodySim::MassComponent>(glm::vec3(0.0f, 0.0f, 0.0f), 5.0f);
+        blue_sphere->add_component<TrailComponent3D>(200);
     }
 
     void update(Engine& engine, std::shared_ptr<Window> window) override {
-        // Access class members directly; no risk of dangling references.
-        if (blue_sphere && orange_sphere) {
-            // simple animation: orbit around origin
-            static float time = 0.0f;
-            time += static_cast<float>(engine.get_delta_time()) * 1.0f;
+        blue_sphere->get_component<TrailComponent3D>().append_trail(blue_sphere->transform.position);
 
-            blue_sphere->position.x = 6.0f * cos(time);
-            blue_sphere->position.z = 6.0f * sin(time);
+        NBodySim::integrate_system_rk4(
+                1.0f, static_cast<float>(engine.delta_time) * step_speed,
+                blue_sphere->get_component<NBodySim::MassComponent>(),
+                orange_sphere->get_component<NBodySim::MassComponent>(),
+                yellow_sphere->get_component<NBodySim::MassComponent>());
 
-            orange_sphere->position.x = -6.0f * cos(time);
-            orange_sphere->position.z = -6.0f * sin(time);
-        }
+        engine.light_render_objects[0].light.position = (orange_sphere->transform.position + blue_sphere->transform.position + yellow_sphere->transform.position) / 3.0f;
     }
 
 private:
-    // Scene state (entities and lights) are now private class members.
     std::shared_ptr<SphereEntity> blue_sphere;
     std::shared_ptr<SphereEntity> orange_sphere;
-    std::vector<LightRenderObject> lights;
+    std::shared_ptr<SphereEntity> yellow_sphere;
+
+    std::vector<LightRenderObject> lights = {
+        { { glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f), 1.0f }, false, 2.5f }
+    };
+
+    float step_speed = 5.0f;
 };
 
-// Factory function now returns a shared pointer to the new class
-std::shared_ptr<Scene> make_axis_cube_scene() {
-    return std::make_shared<AxisCubeScene>();
+std::shared_ptr<Scene> make_scene_gravity() {
+    return std::make_shared<AxisGravityScene>();
 }

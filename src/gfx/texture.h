@@ -8,6 +8,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "shader.h"
 
-GLuint create_opengl_texture(const std::string& path, GLuint shaderProgram);
+GLuint create_opengl_texture(const std::string& path);
 
 #endif

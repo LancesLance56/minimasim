@@ -5,18 +5,15 @@
 #include <imgui.h>
 #include <vector>
 
-#include "math/bezier.h"
-
-// Bezier keyframe definition
 struct BezierKeyframe {
-    float time;
-    float value;
+    float time = 0.0f;
+    float value = 0.0f;
     ImVec2 tangentOffset = ImVec2(30, 0); // default handle offset in pixels
     bool draggingPoint = false;
     bool draggingTangent = false;
 };
 
-inline bool operator==(std::vector<BezierKeyframe> &a, std::vector<BezierKeyframe> &b) {
+inline bool operator==(const std::vector<BezierKeyframe> &a, const std::vector<BezierKeyframe> &b) {
     if (a.size() != b.size())
         return false;
 
@@ -38,16 +35,16 @@ class BezierEditor {
 public:
     bool isAPointSelected = false;
     BezierEditor() = default;
-    explicit BezierEditor(GLFWwindow *glfwWindow);
+    explicit BezierEditor(GLFWwindow* glfwWindow);
     static ImVec2 ToScreen(ImVec2 origin, ImVec2 size, float t, float v);
     static ImVec2 FromScreen(ImVec2 origin, ImVec2 size, ImVec2 screen);
 
     // Call every frame inside ImGui::Begin/End
-    void Draw(const char *label, BezierCurve &curve, ImVec2 canvasSize = ImVec2(500, 300));
+    void Draw(const char* label, BezierCurve &curve, ImVec2 canvasSize = ImVec2(500, 300));
     static std::vector<float> computeHeightRemapLUT(const std::vector<BezierKeyframe> &keyframes, int resolution = 256);
 
 private:
-    GLFWwindow *m_window;
+    GLFWwindow* m_window{};
 
     // Operator helpers
     [[nodiscard]] ImVec2 MousePos() const;

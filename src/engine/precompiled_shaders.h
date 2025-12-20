@@ -10,9 +10,14 @@
 
 // shaders
 
-namespace PrecompiledShaders {
+namespace precompiled_shaders {
     inline std::shared_ptr<Shader> colored_shader;
-    inline std::shared_ptr<Shader> phong_shader;
+    inline std::shared_ptr<Shader> phong_texture_normals_shader;
+    inline std::shared_ptr<Shader> phong_normals_shader;
+    inline std::shared_ptr<Shader> phong_texture_normals_geom_shader;
+    inline std::shared_ptr<Shader> phong_normals_geom_shader;
+
+    void compile();
 }
 
 #endif //PRECOMPILED_SHADERS_H

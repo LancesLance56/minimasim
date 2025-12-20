@@ -1,38 +1,42 @@
-#include "./game_app.h"
+#include "engine_app.h"
 
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 #include "gfx.h"
-#include "lightpos.h"
-#include "window.h"
 #include "input/handle_input.h"
+#include "light.h"
+#include "window.h"
 
-GameApp::GameApp() {
-    game_.init();
-    gui_.init(*game_.get_window(), game_);
+EngineApp::EngineApp(const std::shared_ptr<Window>& window) : engine_(Engine(window)) {
+    engine_.start();
+    gui_.init(*engine_.get_window(), engine_);
 }
 
-void GameApp::run() {
-    Window *gameWindow = game_.get_window();
-    while (!glfwWindowShouldClose(gameWindow->window)) {
-        game_.calculate_delta_time();
+// EngineApp::run now uses the virtual methods of the Scene class
+void EngineApp::run(const std::shared_ptr<Scene>& scene) {
+    // Scene setup
+    const std::shared_ptr<Window> engineWindow = engine_.get_window();
 
-        if (shouldRenderGui)
+    // Call the setup method
+    scene->setup(engine_, engineWindow);
+
+    while (!glfwWindowShouldClose(engineWindow->window)) {
+
+        engine_.calculate_delta_time();
+
+        if (shouldRenderGui) {
             gui_.begin_frame();
+            if (scene) scene->gui(engine_, engineWindow);
+        }
 
-        glClearColor(SKY_BLUE.red, SKY_BLUE.green, SKY_BLUE.blue, 1.0);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        engine_.update();
+        if (scene) scene->update(engine_, engineWindow);
 
-        glPolygonMode(GL_FRONT_AND_BACK, polygon_modes[gameWindow->current_polygon_mode_index]);
-        glPointSize(4.0f);
+        engine_.render();
 
-        game_.update();
-        game_.render();
+        if (shouldRenderGui) TestGUI::render();
 
-        if (shouldRenderGui)
-            gui_.render();
-
-        glfwSwapBuffers(gameWindow->window);
+        glfwSwapBuffers(engineWindow->window);
         glfwPollEvents();
-
-        global_lights_last_frame = global_lights;
     }
 }

@@ -7,7 +7,8 @@
 
 inline bool shouldRenderGui = true;
 
-glm::vec3 handleMovement(GLFWwindow *window, glm::vec3 cameraFront, glm::vec3 cameraUp, double deltaTime);
-void handleInput(GLFWwindow *window);
+glm::vec3 handle_movement(GLFWwindow* window, glm::vec3 cameraFront, glm::vec3 cameraUp, double deltaTime);
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void handle_input(GLFWwindow* window);
 
 #endif

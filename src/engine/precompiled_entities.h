@@ -1,16 +1,15 @@
-//
-// Created by User on 23/09/2025.
-//
-
 #ifndef PRECOMPILED_ENTITIES_H
 #define PRECOMPILED_ENTITIES_H
+#include <memory>
+
+#include "mesh/sphere_entity.h"
 
 namespace precompiled_entities {
 
-class precompiled_entities {
+    inline std::shared_ptr <SphereEntity> white_sphere_entity;
 
-};
+    void compile();
 
-} // precompiled_entities
+}
 
 #endif //PRECOMPILED_ENTITIES_H

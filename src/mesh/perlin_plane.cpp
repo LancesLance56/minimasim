@@ -64,7 +64,7 @@ PerlinPlane::PerlinPlane(
     perlinGen.recalculate_vertex_normals(vertices, perlinGen.indices, settings);
 
     // Create Mesh with optional normals (COLOR_TEXTURE_NORMALS)
-    mesh_ = Mesh(
+    mesh_ = MeshFilter(
         vertices,
         perlinGen.indices,
         shader,

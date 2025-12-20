@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="BackendCodeEditorMiscSettings">
-    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="29" type="long" />
+    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="31" type="long" />
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
     <option name="/Default/Housekeeping/RefactoringsMru/RenameRefactoring/DoRenameType/@EntryValue" value="false" type="bool" />
     <option name="/Default/Housekeeping/RefactoringsMru/RenameRefactoring/DoSearchForTextInStrings/@EntryValue" value="true" type="bool" />
@@ -32,67 +32,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2e764ab0-8ac6-49c2-8fc4-32832de12018" name="Changes" comment="complete refactorization and addition of gravity">
-      <change afterPath="$PROJECT_DIR$/.idea/MeshGL-master.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/engine_app.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/engine_app.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/engine.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/engine.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/engine_gui.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/engine_gui.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/entity/components/component.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/entity/components/mass_component.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/entity/components/mesh_filter_component.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/entity/components/mesh_filter_component.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/entity/components/mesh_renderer_component.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/entity/components/mesh_renderer_component.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/entity/components/trail_component.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/entity/components/trail_component.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/entity/entity.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/entity/entity_base.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/entity/entity_concepts.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/precompiled_entities.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/precompiled_entities.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/precompiled_shaders.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/precompiled_shaders.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/engine/render_settings.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/gfx/line_strip_utils.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/gfx/line_strip_utils.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/math/math_tools.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/math/n_body_sim.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/math/n_body_sim.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/mesh/axis_entity.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/mesh/axis_entity.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/mesh/cube_entity.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/mesh/cube_entity.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/mesh/perlin_plane_entity.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/mesh/perlin_plane_entity.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/mesh/sphere_entity.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/mesh/sphere_entity.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/mesh/sphere_entity_constants.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/scenes/scene_gravity.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/scenes/scene_gravity.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/scenes/scene_test.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/scenes/scene_test.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/shaders/phong/phong_normals.frag" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/shaders/phong/phong_normals.vert" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/textures/Grass.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/textures/Grass.png.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/textures/Rocks 1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/textures/Rocks 1.png.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/textures/Rocks 2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/textures/Rocks 2.png.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/textures/Sandy grass.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/textures/Sandy grass.png.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/textures/Snow.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/textures/Snow.png.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/textures/Stony ground.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/textures/Stony ground.png.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/textures/Tileable noise.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/textures/Tileable noise.png.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/textures/Water.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/textures/Water.png.meta" afterDir="false" />
+    <list default="true" id="2e764ab0-8ac6-49c2-8fc4-32832de12018" name="Changes" comment="First Commit">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
@@ -107,24 +47,51 @@
       <change beforePath="$PROJECT_DIR$/.idea/opengl donut.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/cmake.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/.ninja_deps" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeFiles/engine.dir/src/app/engine_app.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeFiles/engine.dir/src/app/engine_app.cpp.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeFiles/engine.dir/src/engine/entity/components/trail_component.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeFiles/engine.dir/src/engine/entity/components/trail_component.cpp.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeFiles/engine.dir/src/gfx/line_strip_utils.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeFiles/engine.dir/src/gfx/line_strip_utils.cpp.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/Testing/Temporary/LastTest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/engine.exe" beforeDir="false" afterPath="$PROJECT_DIR$/engine.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/imgui/backends/imgui_impl_glfw.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/imgui/backends/imgui_impl_glfw.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/imgui/backends/imgui_impl_opengl3.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/imgui/backends/imgui_impl_opengl3.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/imgui/imgui.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/imgui/imgui.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gfx/abo.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/bo.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gfx/abo.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/bo.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/engine_app.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/engine_app.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/engine_app.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/engine_app.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/engine.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/engine.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/engine.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/engine.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/engine_gui.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/engine_gui.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/engine_gui.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/engine_gui.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/entity/components/component.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/entity/components/component.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/entity/components/mass_component.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/entity/components/mass_component.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/entity/components/mesh_filter_component.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/entity/components/mesh_filter_component.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/entity/components/mesh_filter_component.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/entity/components/mesh_filter_component.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/entity/components/mesh_renderer_component.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/entity/components/mesh_renderer_component.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/entity/components/mesh_renderer_component.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/entity/components/mesh_renderer_component.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/entity/components/trail_component.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/entity/components/trail_component.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/entity/components/trail_component.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/entity/components/trail_component.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/entity/entity.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/entity/entity.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/entity/entity_base.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/entity/entity_base.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/entity/entity_concepts.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/entity/entity_concepts.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/precompiled_entities.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/precompiled_entities.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/precompiled_entities.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/precompiled_entities.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/precompiled_shaders.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/precompiled_shaders.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/engine/precompiled_shaders.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/precompiled_shaders.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/bo.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/bo.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/bo.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/bo.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gfx/camera.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/camera.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gfx/camera.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/camera.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gfx/gfx.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/gfx.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gfx/lightpos.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/light.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gfx/lightpos.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/light.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/light.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/light.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/light.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/light.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/line_strip_utils.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/line_strip_utils.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gfx/line_strip_utils.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/line_strip_utils.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gfx/material.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/material.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gfx/material.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/material.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gfx/renderer.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gfx/renderer.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gfx/shader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/shader.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gfx/shader.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/shader.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gfx/texture.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/texture.cpp" afterDir="false" />
@@ -133,36 +100,36 @@
       <change beforePath="$PROJECT_DIR$/src/gfx/vao.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/vao.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gfx/window.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/window.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/gfx/window.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/gfx/window.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/handle_input.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/input/handle_input.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/handle_input.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/input/handle_input.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/imgui/animation_curve.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/imgui/animation_curve.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/imgui/animation_curve.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/imgui/animation_curve.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/imgui/imgui_helper.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/imgui/imgui_helper.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/input/handle_input.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/input/handle_input.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/input/handle_input.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/input/handle_input.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/math/bezier.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/bezier.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/math/bezier.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/bezier.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/math/perlin.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/perlin.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/math/perlin_noise_map.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/perlin_noise_map.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/math/perlin_noise_map.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/perlin_noise_map.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mesh/cube.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mesh/cube.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mesh/mesh.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mesh/mesh.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/math/math_tools.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/math_tools.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/math/n_body_sim.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/n_body_sim.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/math/n_body_sim.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/n_body_sim.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mesh/axis_entity.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/axis_entity.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mesh/axis_entity.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/axis_entity.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mesh/cube_entity.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/cube_entity.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mesh/cube_entity.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/cube_entity.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/mesh/perlin_plane.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/perlin_plane.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/mesh/perlin_plane.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/perlin_plane.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shaders/phong.frag" beforeDir="false" afterPath="$PROJECT_DIR$/src/shaders/phong/phong_texture_normals.frag" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shaders/phong.vert" beforeDir="false" afterPath="$PROJECT_DIR$/src/shaders/phong/phong_texture_normals.vert" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mesh/sphere_entity.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/sphere_entity.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mesh/sphere_entity.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/sphere_entity.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mesh/sphere_entity_constants.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/sphere_entity_constants.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scenes/scene_gravity.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/scenes/scene_gravity.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scenes/scene_gravity.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/scenes/scene_gravity.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scenes/scene_test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/scenes/scene_test.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scenes/scene_test.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/scenes/scene_test.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shaders/phong/phong_normals.frag" beforeDir="false" afterPath="$PROJECT_DIR$/src/shaders/phong/phong_normals.frag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shaders/phong/phong_normals.vert" beforeDir="false" afterPath="$PROJECT_DIR$/src/shaders/phong/phong_normals.vert" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shaders/phong/phong_texture_normals.frag" beforeDir="false" afterPath="$PROJECT_DIR$/src/shaders/phong/phong_texture_normals.frag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shaders/phong/phong_texture_normals.vert" beforeDir="false" afterPath="$PROJECT_DIR$/src/shaders/phong/phong_texture_normals.vert" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/shaders/textured_terrain.frag" beforeDir="false" afterPath="$PROJECT_DIR$/src/shaders/textured_terrain.frag" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/shaders/textured_terrain.vert" beforeDir="false" afterPath="$PROJECT_DIR$/src/shaders/textured_terrain.vert" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/testgui.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/testgui.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/textures/dirt.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/textures/grass.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/textures/ocean_water.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/textures/rock.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/textures/sand.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/textures/snow.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/textures/water.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -173,6 +140,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "LancesLance56"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "git@github.com:LancesLance56/minimasim.git",
+    "accountId": "1a0cb173-75f0-4d0a-8536-0ba02601cb79"
+  }
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
@@ -341,7 +320,9 @@
       <workItem from="1765619410005" duration="2000" />
       <workItem from="1766144876478" duration="8000" />
       <workItem from="1766156193434" duration="132000" />
-      <workItem from="1766220243656" duration="1000" />
+      <workItem from="1766220243656" duration="848000" />
+      <workItem from="1766221502824" duration="12000" />
+      <workItem from="1766223048562" duration="1382000" />
     </task>
     <servers />
   </component>
@@ -366,9 +347,11 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="cool gravity" />
-    <MESSAGE value="gitignore" />
     <MESSAGE value="complete refactorization and addition of gravity" />
-    <option name="LAST_COMMIT_MESSAGE" value="complete refactorization and addition of gravity" />
+    <MESSAGE value="gitignore" />
+    <MESSAGE value="Gravity!" />
+    <MESSAGE value="First Commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="First Commit" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

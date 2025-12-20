@@ -2,4 +2,12 @@
 .cmake
 cmake-build-debug
 imgui.ini
+src/mesh/perlin_plane.cpp
+src/mesh/perlin_plane.h
+src/mesh/perlin_plane_entity.cpp
+src/mesh/perlin_plane_entity.h
+src/math/perlin.cpp
+src/math/perlin.h
+src/math/perlin_noise_map.cpp
+src/math/perlin_noise_map.h
 TODO

@@ -1,7 +1,10 @@
-#include "projection_camera.h"
+#include "camera.h"
 
 #include <glm/gtx/quaternion.hpp>
 
+/**
+ * @brief Creates a perspective projection matrix
+ */
 Camera::Camera(
     glm::vec3 position,
     glm::vec3 target,
@@ -11,12 +14,38 @@ Camera::Camera(
     float near,
     float far
 ) {
+    camera_type = CameraType::Projection3D;
     this->position   = position;
     this->global_up  = global_up;
-    this->camera_front = glm::normalize(target - position);
+    this->camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
 
     m_projection = glm::perspective(glm::radians(fov), aspect_ratio, near, far);
     update_camera();
+    rotate_to_target(target);
+}
+
+/**
+ * @brief Creates an orthographic projection matrix
+ */
+Camera::Camera(
+    glm::vec3 position,
+    glm::vec3 target,
+    glm::vec3 global_up,
+    float left,
+    float right,
+    float bottom,
+    float top,
+    float near,
+    float far
+) {
+    camera_type = CameraType::Orthographic;
+    this->position   = position;
+    this->global_up  = global_up;
+    this->camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
+
+    m_projection = glm::ortho(left, right, bottom, top, near, far);
+    update_camera();
+    rotate_to_target(target);
 }
 
 void Camera::change_rotation(float x_pos, float y_pos, float mouse_sensitivity) {
@@ -45,9 +74,9 @@ void Camera::change_rotation(float x_pos, float y_pos, float mouse_sensitivity) 
     glm::quat q_pitch = glm::angleAxis(glm::radians(pitch), glm::vec3(1, 0, 0));
     glm::quat q_yaw   = glm::angleAxis(glm::radians(yaw),   glm::vec3(0, 1, 0));
 
-    orientation = q_yaw* q_pitch;
+    orientation = q_yaw * q_pitch;
 
-    camera_front = glm::normalize(orientation* glm::vec3(0, 0, -1));
+    camera_front = glm::normalize(orientation * glm::vec3(0, 0, -1));
 }
 
 void Camera::rotate_to_target(glm::vec3 target_vector, float smoothness) {
@@ -63,9 +92,9 @@ void Camera::move_camera(glm::vec3 move_vector) {
 }
 
 void Camera::update_camera() {
-    right = glm::normalize(glm::cross(camera_front, global_up));
-    up    = glm::normalize(glm::cross(right, camera_front));
+    camera_right = glm::normalize(glm::cross(camera_front, global_up));
+    up    = glm::normalize(glm::cross(camera_right, camera_front));
 
     m_look_at = glm::lookAt(position, position + camera_front, up);
-    mvp = m_projection* m_look_at* m_model;
+    vp = m_projection * m_look_at * m_model;
 }
