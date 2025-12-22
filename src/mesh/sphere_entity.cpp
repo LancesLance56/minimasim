@@ -1,9 +1,9 @@
 #include "sphere_entity.h"
 #include "sphere_entity_constants.h"
 
+#include <../../include/glm/gtc/matrix_transform.hpp>
 #include <algorithm>
 #include <format>
-#include <glm/gtc/matrix_transform.hpp>
 #include <map>
 
 #include "engine/precompiled_shaders.h"
@@ -145,6 +145,7 @@ void SphereEntity::on_gui(int entity_id) {
     ImGui::DragFloat3("Position", &transform.position.x, 0.1f);
     ImGui::DragFloat3("Rotation (rad)", &transform.rotation.x, 0.01f);
     ImGui::DragFloat3("Scale", &transform.scale.x, 0.05f, 0.01f, 100.0f);
+    ImGui::Text(std::format("Entity ID: {}", entity_id).c_str());
 
     ImGui::End();
 }

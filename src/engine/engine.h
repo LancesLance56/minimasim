@@ -4,11 +4,10 @@
 #include <memory>
 #include <vector>
 
-#include "entity/entity.h"
-
+#include "../../include/glm/detail/type_vec3.hpp"
 #include "camera.h"
-#include "entity/components/mesh_renderer_component.h"
-#include "glm/detail/_vectorize.hpp"
+#include "engine/render_settings.h"
+#include "entity_registry.h"
 #include "light.h"
 
 class Window;
@@ -24,8 +23,6 @@ public:
     [[nodiscard]] std::shared_ptr<Window> get_window() const;
     Camera& get_camera();
 
-    void add_entity(const std::shared_ptr<EntityBase>& entity); // <- shared_ptr
-
     void set_light(const std::vector<LightRenderObject> &l);
     void add_light(LightRenderObject light_ro);
 
@@ -33,7 +30,9 @@ public:
 
     RenderSettings render_settings;
     std::vector<LightRenderObject> light_render_objects;
-    std::vector<std::shared_ptr<EntityBase>> entities; // <- changed from unique_ptr
+
+    EntityRegistry registry;
+
     glm::vec3 background_rgb = glm::vec3(0.12f);
 
     std::shared_ptr<Window> window;
@@ -41,7 +40,5 @@ public:
     double delta_time;
     double old_time_log = 0.0f;
 };
-
-
 
 #endif

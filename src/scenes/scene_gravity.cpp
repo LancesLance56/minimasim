@@ -8,27 +8,18 @@
 #include "gfx.h"
 #include "math/n_body_sim.h"
 
-class AxisGravityScene : public Scene {
+class GravityScene : public Scene {
 public:
-    AxisGravityScene() = default;
+    GravityScene() = default;
 
     void setup(Engine& engine, std::shared_ptr<Window> window) override {
-        //float window_aspect_ratio = engine.window->get_aspect_ratio();
-        //engine.camera = Camera(
-        //    glm::vec3(0.0f, 15.0f, 0.0f), glm::vec3(0.0f),
-        //    glm::vec3(0.0f, 1.0f, 0.0f), -15.0f * window_aspect_ratio,
-        //    15.0f * window_aspect_ratio, -15.0f, 15.0f, -100.0f, 100.0f);
-
-        blue_sphere = std::make_shared<SphereEntity>(
+        blue_sphere = engine.registry.create_entity<SphereEntity>(
             glm::vec3(8.0f, 0.0f, -8.0f), 3, 1, false, blue_base_material);
-        orange_sphere = std::make_shared<SphereEntity>(
+        orange_sphere = engine.registry.create_entity<SphereEntity>(
             glm::vec3(-8.0f, 0.0f, 8.0f), 3, 1, false, orange_base_material);
-        yellow_sphere = std::make_shared<SphereEntity>(
+        yellow_sphere = engine.registry.create_entity<SphereEntity>(
             glm::vec3(0.0f), 3, 1, false, yellow_base_material);
 
-        engine.add_entity(blue_sphere);
-        engine.add_entity(yellow_sphere);
-        engine.add_entity(orange_sphere);
         engine.set_light(lights);
 
         blue_sphere->add_component<NBodySim::MassComponent>(glm::vec3(0.0f, 0.0f, 1.0f), 5.0f);
@@ -50,9 +41,9 @@ public:
     }
 
 private:
-    std::shared_ptr<SphereEntity> blue_sphere;
-    std::shared_ptr<SphereEntity> orange_sphere;
-    std::shared_ptr<SphereEntity> yellow_sphere;
+    SphereEntity* blue_sphere = nullptr;
+    SphereEntity* orange_sphere = nullptr;
+    SphereEntity* yellow_sphere = nullptr;
 
     std::vector<LightRenderObject> lights = {
         { { glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f), 1.0f }, false, 2.5f }
@@ -62,5 +53,5 @@ private:
 };
 
 std::shared_ptr<Scene> make_scene_gravity() {
-    return std::make_shared<AxisGravityScene>();
+    return std::make_shared<GravityScene>();
 }

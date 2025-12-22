@@ -2,6 +2,7 @@
 #include "engine.h"
 #include "light.h"
 
+#include "glm/gtc/type_ptr.hpp"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -56,11 +57,7 @@ void TestGUI::begin_frame() const {
 
     ImGui::End();
 
-    for (size_t i = 0; i < engine->entities.size(); ++i) {
-        ImGui::PushID(static_cast<int>(i));
-        engine->entities[i]->on_gui(i);
-        ImGui::PopID();
-    }
+    engine->registry.draw_gui();
 }
 
 void TestGUI::render() {

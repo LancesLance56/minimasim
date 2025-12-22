@@ -1,7 +1,8 @@
+#include "mesh_renderer_component.h"
 #include <format>
 #include <iostream>
-#include "mesh_renderer_component.h"
 
+#include "camera.h"
 #include "math/math_tools.h"
 #include "texture.h"
 

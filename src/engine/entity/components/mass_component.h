@@ -1,8 +1,8 @@
 #ifndef MASS_COMPONENT_H
 #define MASS_COMPONENT_H
 
-#include "glm/detail/type_vec.hpp"
-#include "glm/detail/type_vec3.hpp"
+#include "../../../../include/glm/detail/type_vec.hpp"
+#include "../../../../include/glm/detail/type_vec3.hpp"
 #include "component.h" // Include the new CRTP base
 
 namespace NBodySim {

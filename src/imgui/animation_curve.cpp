@@ -5,7 +5,7 @@
 
 // Removed "glm/detail/func_common.hpp" if it's not strictly needed for other parts of BezierEditor
 // ImGui includes are handled via imgui_helper.h and imgui_internal.h
-#include "glm/gtc/quaternion.hpp"
+#include "../../include/glm/gtc/quaternion.hpp"
 #include "imgui_helper.h"
 #include "imgui_internal.h"
 

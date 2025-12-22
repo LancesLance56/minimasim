@@ -5,7 +5,7 @@
 #include "app/engine_app.h"
 
 // Forward declaration for the concrete scene class
-class AxisGravityScene;
+class GravityScene;
 
 // Factory function now returns a shared_ptr to the base Scene class
 std::shared_ptr<Scene> make_scene_gravity();

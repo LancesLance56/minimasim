@@ -1,8 +1,6 @@
 #ifndef SPHERE_ENTITY_H
 #define SPHERE_ENTITY_H
 
-#include "../engine/entity/components/mesh_filter_component.h"
-#include "../engine/entity/components/mesh_renderer_component.h"
 #include "engine/entity/entity.h"
 #include "gfx.h"
 #include "math/n_body_sim.h"

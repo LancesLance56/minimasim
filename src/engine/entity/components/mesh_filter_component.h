@@ -8,6 +8,7 @@
 #include <optional>
 #include <string>
 #include <vector>
+#include <glm/glm.hpp>
 
 #include "gfx.h"
 

@@ -1,6 +1,8 @@
 #include "cube_entity.h"
 #include "engine/entity/components/mesh_renderer_component.h"
 #include "engine/precompiled_shaders.h"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 #include "imgui.h"
 
 std::vector<GLfloat> get_colored_cube_vertices() {

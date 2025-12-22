@@ -2,9 +2,8 @@
 #define CAMERA_H
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/quaternion.hpp>
 
+#include "glm/gtc/quaternion.hpp"
 
 enum class CameraType {
     Projection3D,

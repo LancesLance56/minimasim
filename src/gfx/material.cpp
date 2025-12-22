@@ -1,6 +1,6 @@
 #include "material.h"
 
-#include "glm/gtc/type_ptr.hpp"
+#include "../../include/glm/gtc/type_ptr.hpp"
 #include "imgui.h"
 #include "shader.h"
 

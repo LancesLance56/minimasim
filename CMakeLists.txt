@@ -61,7 +61,6 @@ set(SOURCES
         src/mesh/cube_entity.cpp
         src/mesh/sphere_entity.cpp
         src/scenes/scene_gravity.cpp
-        src/scenes/scene_test.cpp
 )
 
 # Add executable target

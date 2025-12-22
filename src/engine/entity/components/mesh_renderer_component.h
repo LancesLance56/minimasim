@@ -4,13 +4,11 @@
 #include "component.h" // Include the new CRTP base
 #include "mesh_filter_component.h"
 #include "../../../gfx/bo.h"
-#include "../../../gfx/camera.h"
 #include "../../../gfx/light.h"
 #include "../../../gfx/material.h"
 #include "../../../gfx/shader.h"
 #include "../../../gfx/vao.h"
 
-#include <glm/gtc/type_ptr.hpp>
 #include <memory>
 #include <span>
 

@@ -7,7 +7,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "glm/gtc/type_ptr.hpp"
+#include "../../include/glm/gtc/type_ptr.hpp"
 
 Shader::Shader() = default;
 
@@ -191,6 +191,7 @@ void Shader::check_shader_compiler_errors(const GLuint shader_id, const ShaderTy
             glGetProgramiv(shader_id, GL_LINK_STATUS, &success);
             if (!success) {
                 glGetProgramInfoLog(shader_id, 512, nullptr, info_log);
+                std::cerr << "ID: " << shader_id << "\n";
                 std::cerr << "Error: Shader Program Linking Failed\n" << info_log << "\n";
             } else {
                 // Always print info log, even on success, for warnings

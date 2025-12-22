@@ -7,7 +7,7 @@
 #include "line_strip_utils.h"
 #include "component.h" // Make sure to include the new component.h
 
-#include "glm/detail/type_vec.hpp"
+#include "../../../../include/glm/detail/type_vec.hpp"
 
 class TrailComponent3D : public Component<TrailComponent3D> {
 public:

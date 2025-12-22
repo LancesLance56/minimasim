@@ -2,7 +2,6 @@
 
 #include <GLFW/glfw3.h>
 #include <algorithm>
-
 #include <utility>
 
 #include "../gfx/light.h"
@@ -45,31 +44,20 @@ void Engine::update() {
         camera.update_camera();
     }
 
-    for (auto const& entity : entities) {
-        entity->update(delta_time);
-    }
+    registry.update_systems(delta_time);
 }
 
 void Engine::render() {
     glClearColor(background_rgb.x, background_rgb.y, background_rgb.z, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // extract Light from LightRenderObject (Light, bool) as of now
     std::vector<Light> lights;
     std::ranges::transform(
             light_render_objects, std::back_inserter(lights),
             [](const LightRenderObject &t){ return t.light; });
 
-    // draw entities with access to lights
-    for (auto const& entity : entities) {
-        if (render_settings.wireframe)
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    registry.draw_systems(camera, render_settings, lights);
 
-        entity->draw(camera, render_settings, lights);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    }
-
-    // draw lights themselves (as cubes, gizmos, etc.)
     for (const auto &[light, visible, radius] : light_render_objects) {
         if (!visible) continue;
 
@@ -91,10 +79,6 @@ std::shared_ptr<Window> Engine::get_window() const {
 
 Camera& Engine::get_camera() {
     return camera;
-}
-
-void Engine::add_entity(const std::shared_ptr<EntityBase>& entity) {
-    entities.push_back(entity);
 }
 
 void Engine::add_light(LightRenderObject light_ro) {

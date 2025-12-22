@@ -1,6 +1,6 @@
 #include "axis_entity.h"
+#include <../../include/glm/gtc/matrix_transform.hpp>
 #include <glad/glad.h>
-#include <glm/gtc/matrix_transform.hpp>
 #include <vector>
 
 AxisEntity::AxisEntity(float axis_length, float arrow_size)
