@@ -3,55 +3,55 @@
 #include "../mesh/sphere_entity.h"
 #include "app/engine_app.h"
 #include "light.h"
-
-#include "engine/entity/components/trail_component.h"
 #include "gfx.h"
 #include "math/n_body_sim.h"
 
-class GravityScene : public Scene {
+class SolarSystemScene : public Scene {
 public:
-    GravityScene() = default;
+    SolarSystemScene() = default;
 
     void setup(Engine& engine, std::shared_ptr<Window> window) override {
-        blue_sphere = engine.registry.create_entity<SphereEntity>(
-            glm::vec3(8.0f, 0.0f, -8.0f), 3, 1, false, blue_base_material);
-        orange_sphere = engine.registry.create_entity<SphereEntity>(
-            glm::vec3(-8.0f, 0.0f, 8.0f), 3, 1, false, orange_base_material);
-        yellow_sphere = engine.registry.create_entity<SphereEntity>(
-            glm::vec3(0.0f), 3, 1, false, yellow_base_material);
+        sun = engine.registry.create_entity<SphereEntity>(
+            glm::vec3(0.0f), 3, 1.0f, false, yellow_base_material);
+        earth = engine.registry.create_entity<SphereEntity>(
+            glm::vec3(15.0f, 0.0f, 0.0f), 3, 1.0f, true, blue_base_material);
+        mars = engine.registry.create_entity<SphereEntity>(
+            glm::vec3(-25.0f, 0.0f, 0.0f), 3, 0.8f, true, orange_base_material);
+
+        sun->add_component<NBodySim::MassComponent>(glm::vec3(0.0f), 1000.0f);
+        earth->add_component<NBodySim::MassComponent>(glm::vec3(0.0f, 0.0f, 8.16f), 1.0f);
+        mars->add_component<NBodySim::MassComponent>(glm::vec3(0.0f, 0.0f, -6.32f), 0.6f);
 
         engine.set_light(lights);
-
-        blue_sphere->add_component<NBodySim::MassComponent>(glm::vec3(0.0f, 0.0f, 1.0f), 5.0f);
-        orange_sphere->add_component<NBodySim::MassComponent>(glm::vec3(1.0f, 0.0f, 1.0f), 5.0f);
-        yellow_sphere->add_component<NBodySim::MassComponent>(glm::vec3(0.0f, 0.0f, 0.0f), 5.0f);
-        blue_sphere->add_component<TrailComponent3D>(200);
     }
 
     void update(Engine& engine, std::shared_ptr<Window> window) override {
-        blue_sphere->get_component<TrailComponent3D>().append_trail(blue_sphere->transform.position);
+        float dt = static_cast<float>(engine.delta_time) * step_speed;
 
-        NBodySim::integrate_system_rk4(
-                1.0f, static_cast<float>(engine.delta_time) * step_speed,
-                blue_sphere->get_component<NBodySim::MassComponent>(),
-                orange_sphere->get_component<NBodySim::MassComponent>(),
-                yellow_sphere->get_component<NBodySim::MassComponent>());
+        auto& sun_phys = sun->get_component<NBodySim::MassComponent>();
+        auto& earth_phys = earth->get_component<NBodySim::MassComponent>();
+        auto& mars_phys = mars->get_component<NBodySim::MassComponent>();
 
-        engine.light_render_objects[0].light.position = (orange_sphere->transform.position + blue_sphere->transform.position + yellow_sphere->transform.position) / 3.0f;
+        NBodySim::integrate_system_rk4(1.0f, dt, sun_phys, earth_phys, mars_phys);
+
+        sun->transform.position = sun_phys.center_of_mass;
+        earth->transform.position = earth_phys.center_of_mass;
+        mars->transform.position = mars_phys.center_of_mass;
+
+        lights[0].light.position = sun->transform.position;
     }
 
 private:
-    SphereEntity* blue_sphere = nullptr;
-    SphereEntity* orange_sphere = nullptr;
-    SphereEntity* yellow_sphere = nullptr;
+    SphereEntity* sun = nullptr;
+    SphereEntity* earth = nullptr;
+    SphereEntity* mars = nullptr;
 
+    float step_speed = 1.0f;
     std::vector<LightRenderObject> lights = {
-        { { glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f), 1.0f }, false, 2.5f }
+        { { glm::vec3(0.0f), glm::vec3(1.0f), 1.5f }, false, 60.0f }
     };
-
-    float step_speed = 5.0f;
 };
 
 std::shared_ptr<Scene> make_scene_gravity() {
-    return std::make_shared<GravityScene>();
+    return std::make_shared<SolarSystemScene>();
 }

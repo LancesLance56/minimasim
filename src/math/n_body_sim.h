@@ -130,6 +130,16 @@ namespace NBodySim {
             attr.velocity += dv_avg * time_step;
         }
     }
+
+    template <typename T, size_t N>
+    void integrate_system_rk4_multi(float G, float time_step, const std::array<T, N>& components) {
+        std::apply(
+            [&](auto&&... elems) {
+                integrate_system_rk4(G, time_step, elems...);
+            },
+            components
+        );
+    }
     
 } // namespace NBodySim
 

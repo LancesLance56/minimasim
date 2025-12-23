@@ -42,7 +42,6 @@ set(SOURCES
         src/engine/precompiled_shaders.cpp
         src/engine/entity/components/mesh_filter_component.cpp
             src/engine/entity/components/mesh_renderer_component.cpp
-            src/engine/entity/components/trail_component.cpp
         src/gfx/bo.cpp
         src/gfx/camera.cpp
         src/gfx/light.cpp
