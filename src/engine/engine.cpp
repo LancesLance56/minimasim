@@ -20,14 +20,11 @@ Engine::Engine(std::shared_ptr<Window> window) {
 }
 
 void Engine::start() {
-    render_settings = { false, false, false };
+    render_settings = {false, false, false};
 
-    camera = Camera(
-        glm::vec3(-5.0f, 10.0f, 4.5f),
-        glm::vec3(0.0f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 1.0f, 0.0f),
-        static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT)
-    );
+    camera =
+            Camera(glm::vec3(-5.0f, 10.0f, 4.5f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
+                   static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT));
     light_render_objects = std::vector<LightRenderObject>();
 
     window->set_camera(camera);
@@ -53,13 +50,13 @@ void Engine::render() {
 
     std::vector<Light> lights;
     std::ranges::transform(
-            light_render_objects, std::back_inserter(lights),
-            [](const LightRenderObject &t){ return t.light; });
+            light_render_objects, std::back_inserter(lights), [](const LightRenderObject &t) { return t.light; });
 
     registry.draw_systems(camera, render_settings, lights);
 
-    for (const auto &[light, visible, radius] : light_render_objects) {
-        if (!visible) continue;
+    for (const auto &[light, visible, radius]: light_render_objects) {
+        if (!visible)
+            continue;
 
         precompiled_entities::white_sphere_entity->transform.position = light.position;
         precompiled_entities::white_sphere_entity->radius = radius;
@@ -73,22 +70,12 @@ void Engine::calculate_delta_time() {
     old_time_log = current_time;
 }
 
-std::shared_ptr<Window> Engine::get_window() const {
-    return window;
-}
+std::shared_ptr<Window> Engine::get_window() const { return window; }
 
-Camera& Engine::get_camera() {
-    return camera;
-}
+Camera &Engine::get_camera() { return camera; }
 
-void Engine::add_light(LightRenderObject light_ro) {
-    light_render_objects.emplace_back(light_ro);
-}
+void Engine::add_light(LightRenderObject light_ro) { light_render_objects.emplace_back(light_ro); }
 
-void Engine::set_light(const std::vector<LightRenderObject> &l) {
-    this->light_render_objects = l;
-}
+void Engine::set_light(const std::vector<LightRenderObject> &l) { this->light_render_objects = l; }
 
-double Engine::get_delta_time() const {
-    return delta_time;
-}
+double Engine::get_delta_time() const { return delta_time; }

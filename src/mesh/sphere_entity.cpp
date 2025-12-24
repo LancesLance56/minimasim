@@ -11,8 +11,8 @@
 
 MeshData generate_icosphere(int, bool);
 
-SphereEntity::SphereEntity(glm::vec3 position, int subdivisions, float r, bool has_normals, const Material &material)
-    : material(material), radius(r) {
+SphereEntity::SphereEntity(glm::vec3 position, int subdivisions, float r, bool has_normals, const Material &material) :
+    material(material), radius(r) {
     transform.position = position;
     transform.rotation = glm::vec3(0.0f);
     transform.scale = glm::vec3(r);
@@ -34,19 +34,14 @@ MeshData generate_icosphere(int subdivisions, bool has_normals) {
         indices = three_subdivisions_indices;
     } else {
         constexpr auto t = glm::golden_ratio<float>();
-        std::vector<glm::vec3> positions = {
-            {-1,  t,  0}, { 1,  t,  0}, {-1, -t,  0}, { 1, -t,  0},
-            { 0, -1,  t}, { 0,  1,  t}, { 0, -1, -t}, { 0,  1, -t},
-            { t,  0, -1}, { t,  0,  1}, {-t,  0, -1}, {-t,  0,  1}
-        };
-        for (auto &p : positions) p = glm::normalize(p);
+        std::vector<glm::vec3> positions = {{-1, t, 0},  {1, t, 0},  {-1, -t, 0}, {1, -t, 0}, {0, -1, t},  {0, 1, t},
+                                            {0, -1, -t}, {0, 1, -t}, {t, 0, -1},  {t, 0, 1},  {-t, 0, -1}, {-t, 0, 1}};
+        for (auto &p: positions)
+            p = glm::normalize(p);
 
-        std::vector<GLuint> init_indices = {
-            0,5,11,  0,1,5,   0,7,1,   0,10,7,  0,11,10,
-            1,9,5,   5,4,11,  11,2,10, 10,6,7,  7,8,1,
-            3,4,9,   3,2,4,   3,6,2,   3,8,6,   3,9,8,
-            4,5,9,   2,11,4,  6,10,2,  8,7,6,   9,1,8
-        };
+        std::vector<GLuint> init_indices = {0,  5,  11, 0,  1,  5, 0, 7, 1, 0,  10, 7, 0,  11, 10, 1, 9, 5, 5, 4,
+                                            11, 11, 2,  10, 10, 6, 7, 7, 8, 1,  3,  4, 9,  3,  2,  4, 3, 6, 2, 3,
+                                            8,  6,  3,  9,  8,  4, 5, 9, 2, 11, 4,  6, 10, 2,  8,  7, 6, 9, 1, 8};
         indices.assign(std::begin(init_indices), std::end(init_indices));
 
         std::map<std::pair<GLuint, GLuint>, GLuint> mid_cache;
@@ -68,8 +63,8 @@ MeshData generate_icosphere(int subdivisions, bool has_normals) {
             new_indices.reserve(indices.size() * 4);
             for (size_t j = 0; j < indices.size(); j += 3) {
                 GLuint a = indices[j];
-                GLuint b = indices[j+1];
-                GLuint c = indices[j+2];
+                GLuint b = indices[j + 1];
+                GLuint c = indices[j + 2];
 
                 GLuint ab = get_mid_point(a, b);
                 GLuint bc = get_mid_point(b, c);
@@ -85,7 +80,7 @@ MeshData generate_icosphere(int subdivisions, bool has_normals) {
 
         vertex_data.reserve(positions.size() * (has_normals ? 6 : 3));
 
-        for (auto const &p : positions) {
+        for (auto const &p: positions) {
             glm::vec3 normal = glm::normalize(p);
 
             vertex_data.push_back(p.x);
@@ -112,9 +107,9 @@ MeshData generate_icosphere(int subdivisions, bool has_normals) {
 glm::mat4 SphereEntity::compute_model_matrix() const {
     glm::mat4 model(1.0f);
     model = glm::translate(model, transform.position);
-    model = glm::rotate(model, transform.rotation.x, glm::vec3(1,0,0));
-    model = glm::rotate(model, transform.rotation.y, glm::vec3(0,1,0));
-    model = glm::rotate(model, transform.rotation.z, glm::vec3(0,0,1));
+    model = glm::rotate(model, transform.rotation.x, glm::vec3(1, 0, 0));
+    model = glm::rotate(model, transform.rotation.y, glm::vec3(0, 1, 0));
+    model = glm::rotate(model, transform.rotation.z, glm::vec3(0, 0, 1));
     model = glm::scale(model, glm::vec3(radius));
     model = glm::scale(model, transform.scale);
 

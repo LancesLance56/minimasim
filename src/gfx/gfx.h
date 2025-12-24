@@ -26,6 +26,13 @@ const auto blue_base_material = Material(
     32.0f
 );
 
+const auto gray_base_material = Material(
+    glm::vec3(0.5f, 0.5f, 0.5f),
+    glm::vec3(1.0f),
+    glm::vec3(0.3f),
+    32.0f
+);
+
 const auto orange_base_material = Material(
     glm::vec3(1.0f, 0.4f, 0.1f),
     glm::vec3(1.0f),

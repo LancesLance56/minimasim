@@ -5,7 +5,6 @@ set(CMAKE_CXX_COMPILER "C:/Program Files/w64devkit/bin/g++.exe")
 
 project(engine)
 
-# Set C++ standard to C++20
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -14,7 +13,6 @@ add_definitions(-DGLFW_INCLUDE_NONE)
 set(CMAKE_BUILD_TYPE Debug)
 
 
-# Set include directories
 include_directories(
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/src
@@ -23,7 +21,6 @@ include_directories(
         ${CMAKE_SOURCE_DIR}/include/imgui/backends
 )
 
-# Add source files
 set(SOURCES
     include/glad.c
     include/imgui/imgui.cpp
@@ -41,7 +38,8 @@ set(SOURCES
         src/engine/precompiled_entities.cpp
         src/engine/precompiled_shaders.cpp
         src/engine/entity/components/mesh_filter_component.cpp
-            src/engine/entity/components/mesh_renderer_component.cpp
+        src/engine/entity/components/mesh_renderer_component.cpp
+        src/engine/entity/components/mass_component.cpp
         src/gfx/bo.cpp
         src/gfx/camera.cpp
         src/gfx/light.cpp
@@ -62,8 +60,9 @@ set(SOURCES
         src/scenes/scene_gravity.cpp
 )
 
-# Add executable target
 add_executable(engine ${SOURCES})
+set_target_properties(engine PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/build"
+)
 
-# Link GLFW library
 target_link_libraries(engine ${CMAKE_SOURCE_DIR}/lib/libglfw3dll.a)

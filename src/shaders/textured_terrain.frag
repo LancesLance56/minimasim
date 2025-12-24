@@ -64,7 +64,7 @@ void main()
         if (heightNormalized >= lowerHeight && heightNormalized < upperHeight) {
             float blendFactor = smoothstep(lowerHeight, upperHeight, heightNormalized);
             vec3 tex1Color = texture(terrainTextures[i], TexCoord * textureWrapScale).rgb;
-            vec3 tex2Color = texture(terrainTextures[i+1], TexCoord * textureWrapScale).rgb;
+            vec3 tex2Color = texture(terrainTextures[i + 1], TexCoord * textureWrapScale).rgb;
             blendedTexColor = mix(tex1Color, tex2Color, blendFactor);
         }
         if (heightNormalized >= terrainHeights[terrainTypeCount - 1]) {

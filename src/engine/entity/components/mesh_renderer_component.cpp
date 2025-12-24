@@ -6,15 +6,10 @@
 #include "math/math_tools.h"
 #include "texture.h"
 
-MeshRenderer::MeshRenderer(const std::shared_ptr<Shader>& shader_ptr, const MeshFilter& mesh)
-    :   vao_(VAO()),
-        vbo_(BO<BufferType::VBO>(mesh.mesh_data.bo_usage_hint)),
-        ebo_(BO<BufferType::EBO>(mesh.mesh_data.bo_usage_hint)),
-        mesh_filter(mesh),
-        shader(shader_ptr),
-        vertices_count(mesh.mesh_data.vertices.size()),
-        indices_count(mesh.mesh_data.indices.size())
-    {
+MeshRenderer::MeshRenderer(const std::shared_ptr<Shader> &shader_ptr, const MeshFilter &mesh) :
+    vao_(VAO()), vbo_(BO<BufferType::VBO>(mesh.mesh_data.bo_usage_hint)),
+    ebo_(BO<BufferType::EBO>(mesh.mesh_data.bo_usage_hint)), mesh_filter(mesh), shader(shader_ptr),
+    vertices_count(mesh.mesh_data.vertices.size()), indices_count(mesh.mesh_data.indices.size()) {
 
     vao_.bind();
     vbo_.set_data(VectorUtils::flatten_container(mesh.mesh_data.vertices));
@@ -31,7 +26,7 @@ MeshRenderer::MeshRenderer(const std::shared_ptr<Shader>& shader_ptr, const Mesh
     int stride = 3 * sizeof(float); // Default: positions only
     if (has_texture && has_normals) {
         stride = 8 * sizeof(float);
-        vao_.vattribptr(0, 3, GL_FLOAT, stride, 0);                 // position
+        vao_.vattribptr(0, 3, GL_FLOAT, stride, 0); // position
         vao_.vattribptr(1, 2, GL_FLOAT, stride, 3 * sizeof(float)); // texcoord
         vao_.vattribptr(2, 3, GL_FLOAT, stride, 5 * sizeof(float)); // normal
     } else if (has_texture) {
@@ -50,15 +45,16 @@ MeshRenderer::MeshRenderer(const std::shared_ptr<Shader>& shader_ptr, const Mesh
     // Texture
     if (has_texture && mesh.mesh_data.texture_path && !mesh.mesh_data.texture_path->empty()) {
         texture = create_opengl_texture(*mesh.mesh_data.texture_path);
-        if (texture == 0) std::cerr << "[MeshRenderer] Failed to create texture\n";
+        if (texture == 0)
+            std::cerr << "[MeshRenderer] Failed to create texture\n";
     } else {
         texture = -1;
     }
     VAO::unbind();
 }
 
-void MeshRenderer::draw(const glm::mat4& mvp, const Camera& camera,
-                    std::span<const Light> lights, const Material& material) const {
+void MeshRenderer::draw(
+        const glm::mat4 &mvp, const Camera &camera, std::span<const Light> lights, const Material &material) const {
 
     shader->use();
     shader->set_mat4("mvp", mvp);
@@ -77,18 +73,27 @@ void MeshRenderer::draw(const glm::mat4& mvp, const Camera& camera,
     }
 
     if (should_draw_elements_) {
-        glDrawElements(static_cast<GLenum>(mesh_filter.mesh_data.draw_mode), mesh_filter.mesh_data.indices.size(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(
+                static_cast<GLenum>(mesh_filter.mesh_data.draw_mode), mesh_filter.mesh_data.indices.size(),
+                GL_UNSIGNED_INT, nullptr);
     } else {
-        int normals_count = mesh_filter.mesh_data.flags == Flags::PosNormalsTex || mesh_filter.mesh_data.flags == Flags::PosNormals ? 3 : 0;
-        int tex_count = mesh_filter.mesh_data.flags == Flags::PosNormalsTex || mesh_filter.mesh_data.flags == Flags::PosTexture ? 2 : 0;
-        glDrawArrays(static_cast<GLenum>(mesh_filter.mesh_data.draw_mode), 0, mesh_filter.mesh_data.vertices.size() / (3 + normals_count + tex_count));
+        int normals_count =
+                mesh_filter.mesh_data.flags == Flags::PosNormalsTex || mesh_filter.mesh_data.flags == Flags::PosNormals
+                        ? 3
+                        : 0;
+        int tex_count =
+                mesh_filter.mesh_data.flags == Flags::PosNormalsTex || mesh_filter.mesh_data.flags == Flags::PosTexture
+                        ? 2
+                        : 0;
+        glDrawArrays(
+                static_cast<GLenum>(mesh_filter.mesh_data.draw_mode), 0,
+                mesh_filter.mesh_data.vertices.size() / (3 + normals_count + tex_count));
     }
 
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void MeshRenderer::draw(const glm::mat4& mvp, const Camera& camera,
-                    std::span<const Light> lights) const {
+void MeshRenderer::draw(const glm::mat4 &mvp, const Camera &camera, std::span<const Light> lights) const {
     shader->use();
     shader->set_mat4("mvp", mvp);
     shader->set_mat4("model", model);
@@ -114,7 +119,9 @@ void MeshRenderer::draw(const glm::mat4& mvp, const Camera& camera,
 
     // FIX: Use the dynamic draw mode
     if (should_draw_elements_) {
-        glDrawElements(static_cast<GLenum>(mesh_filter.mesh_data.draw_mode), mesh_filter.mesh_data.indices.size(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(
+                static_cast<GLenum>(mesh_filter.mesh_data.draw_mode), mesh_filter.mesh_data.indices.size(),
+                GL_UNSIGNED_INT, nullptr);
     } else {
         glDrawArrays(static_cast<GLenum>(mesh_filter.mesh_data.draw_mode), 0, mesh_filter.mesh_data.indices.size());
     }

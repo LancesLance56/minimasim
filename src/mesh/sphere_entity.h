@@ -13,13 +13,11 @@ public:
 
     std::optional<NBodySim::MassData> mass_attr;
 
-    explicit SphereEntity(glm::vec3 position,
-                          int subdivisions = 3,
-                          float radius = 1.0f,
-                          bool has_normals = true,
-                          const Material &material = blue_base_material);
+    explicit SphereEntity(
+            glm::vec3 position, int subdivisions = 3, float radius = 1.0f, bool has_normals = true,
+            const Material &material = blue_base_material);
 
-    void draw(const Camera& cam, const RenderSettings &rs);
+    void draw(const Camera &cam, const RenderSettings &rs);
     void draw(const Camera &cam, const RenderSettings &rs, const std::span<const Light> &lights);
 
     void on_gui(int entity_id) override;

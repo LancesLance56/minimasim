@@ -22,7 +22,7 @@ public:
 
 class EngineApp {
 public:
-    EngineApp(const std::shared_ptr<Window>& window);
+    explicit EngineApp(const std::shared_ptr<Window>& window);
 
     // Run now accepts a shared_ptr to a Scene instance
     void run(const std::shared_ptr<Scene>& scene);

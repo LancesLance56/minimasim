@@ -1,6 +1,9 @@
 #ifndef MASS_COMPONENT_H
 #define MASS_COMPONENT_H
 
+#include <format>
+
+
 #include "../../../../include/glm/detail/type_vec.hpp"
 #include "../../../../include/glm/detail/type_vec3.hpp"
 #include "component.h" // Include the new CRTP base
@@ -12,14 +15,15 @@ namespace NBodySim {
      * @param velocity pointer to the velocity of the object the attribute is attached to
      * @param mass is the mass of the object used to calculate its impact on other bodies
      */
-    struct MassComponent : public Component<MassComponent> { // CRTP Inheritance
-        glm::vec3 &center_of_mass;
+    struct MassComponent : Component<MassComponent> { // CRTP Inheritance
+        glm::vec3 &center_of_mass; // reference to entity position
         glm::vec3 velocity;
         float mass;
 
-        MassComponent(glm::vec3& com, glm::vec3 v, float m)
-            : center_of_mass(com), velocity(v), mass(m) {}
-    };
-}
+        MassComponent(glm::vec3 &com, glm::vec3 v, float m) : center_of_mass(com), velocity(v), mass(m) {}
 
-#endif //MASS_COMPONENT_H
+        void gui(int entity_id) override;
+    };
+} // namespace NBodySim
+
+#endif // MASS_COMPONENT_H

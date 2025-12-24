@@ -21,7 +21,7 @@ public:
     void calculate_delta_time();
 
     [[nodiscard]] std::shared_ptr<Window> get_window() const;
-    Camera& get_camera();
+    Camera &get_camera();
 
     void set_light(const std::vector<LightRenderObject> &l);
     void add_light(LightRenderObject light_ro);

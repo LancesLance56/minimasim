@@ -7,7 +7,7 @@ out vec2 texture_coordinate;
 uniform mat4 mvp;
 
 void main() {
-  texture_coordinate = texture_coord_attr;
+    texture_coordinate = texture_coord_attr;
 
-  gl_Position = mvp * vec4(aPos, 1.0);
+    gl_Position = mvp * vec4(aPos, 1.0);
 }

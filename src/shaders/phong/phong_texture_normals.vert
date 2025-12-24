@@ -11,15 +11,15 @@ uniform mat4 mvp;
 uniform mat4 model;
 
 out VS_OUT {
-  vec3 pos;
-  vec3 normal;
+    vec3 pos;
+    vec3 normal;
 } vs_out;
 
 void main() {
-  FragPos = vec3(model * vec4(aPos, 1.0));
-  Normal = mat3(transpose(inverse(model))) * aNormal;
-  TexCoord = aTexCoord;
-  vs_out.normal = Normal;
-  vs_out.pos = FragPos;
-  gl_Position = mvp * model * vec4(aPos, 1.0);
+    FragPos = vec3(model * vec4(aPos, 1.0));
+    Normal = mat3(transpose(inverse(model))) * aNormal;
+    TexCoord = aTexCoord;
+    vs_out.normal = Normal;
+    vs_out.pos = FragPos;
+    gl_Position = mvp * model * vec4(aPos, 1.0);
 }
